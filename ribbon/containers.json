@@ -1,0 +1,4 @@
+{
+    "LigandMPNN": ["ligandMPNN.sif", "oras://docker.io/nicholasfreitas/ligandmpnn:latest"],
+    "FastRelax":  ["rosetta.sif", "oras://docker.io/nicholasfreitas/rosetta:latest"]
+}
