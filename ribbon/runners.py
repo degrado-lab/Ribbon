@@ -69,8 +69,32 @@ def fastrelax(output_dir, pdb_input_file=None, pdb_input_dir=None, container_pat
 
     return
 
+
+def run_task(task_name, extra_args="", **kwargs ):
+    ''' Run a task with the given name and arguments.
+    Inputs:
+        task_name: str - the name of the task to run
+        kwargs: dict - the arguments to pass to the task. These are task-specific.
+    Outputs:
+        None
+    '''
+    # Add extra_args to kwargs:
+    kwargs['extra_args'] = extra_args
+
+    # Which inputs does our task require?
+    required_inputs = utils.get_task_inputs(task_name)
+    print(required_inputs)
+
+    # Check that we have all the required inputs
+    for input in required_inputs:
+        if input not in kwargs:
+            raise ValueError(f'Input {input} is required for task {task_name}')
+        print(f'{input}: {kwargs[input]}')
+
 # Types of inputs:
 # FASTA_FILE
 # FASTA_DIR
 # PDB_FILE
 # PDB_DIR
+
+run_task("LigandMPNN", pdb_input_json='test', output_dir='test', num_designs=1, extra_args='--butt face')

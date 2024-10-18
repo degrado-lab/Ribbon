@@ -1,6 +1,7 @@
 import os
 import subprocess
 from pathlib import Path
+import json
 from config import DOWNLOAD_DIR
 
 
@@ -56,6 +57,20 @@ def download_container(container_local_path, container_ORAS_URL):
     run_command(command)
 
     return # Get error codes, etc.
+
+def get_task_inputs(task_name):
+    '''Returns the inputs required for a given task'''
+    # Which inputs does our task require?
+    with open('tasks.json') as f:
+        tasks = json.load(f)
+
+    #Get the command:
+    command = tasks[task_name]['command']
+
+    #Inputs are surrounded by curly braces. Here we extract them.
+    inputs = [i[1:-1] for i in command.split() if i.startswith('{') and i.endswith('}')]
+    
+    return inputs
 
 def run_command(command):
 	# Run the container
