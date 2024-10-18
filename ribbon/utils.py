@@ -4,6 +4,19 @@ from pathlib import Path
 from config import DOWNLOAD_DIR
 
 
+def directory_to_list(directory, extension):
+    '''Returns a list of files in a directory with a given extension'''
+    return [os.path.join(directory, f) for f in os.listdir(directory) if f.endswith(extension)]
+
+def make_directories(*directories):
+    '''Creates directories if they do not exist. 
+    Returns a list of Path objects, in case they were strings.'''
+    for directory in directories:
+        # Check it's a Path object:
+        if not isinstance(directory, Path):
+            directory = Path(directory)
+        directory.mkdir(parents=True, exist_ok=True)
+    return directories
 
 def ribbon_decorator(software_name):
     def ribbon_decorator_internal(func):

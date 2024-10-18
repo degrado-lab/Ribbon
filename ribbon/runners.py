@@ -1,5 +1,5 @@
 #ribbon?
-from utils import ribbon_decorator
+from utils import ribbon_decorator, make_directories, directory_to_list
 import os
 import tempfile
 import shutil
@@ -15,36 +15,30 @@ def ligandmpnn(output_dir, pdb_input_file=None, pdb_input_dir=None, num_designs=
 
 	# If pdb_input_file is not None, copy the file to a temporary directory
     if pdb_input_file is not None:
-        # Create a temporary directory to store the input files
         temp_dir = tempfile.mkdtemp()
-        # Copy the input file to the temp_dir
         shutil.copy(pdb_input_file, temp_dir)
-        # Set the pdb_input_dir to the temp_dir
         pdb_input_dir = temp_dir
 
     # Make directories:
-    output_dir, pdb_input_dir = Path(output_dir), Path(pdb_input_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    pdb_input_dir.mkdir(parents=True, exist_ok=True)
+    output_dir, pdb_input_dir = make_directories(output_dir, pdb_input_dir)
+
+    # Compile all our PDB files into a list:
+    pdb_files = directory_to_list(pdb_input_dir, '.pdb')
 
     # Then, write out the files within pdb_input_dir to a json file:
     pdb_input_json = output_dir / 'pdb_input.json'
-    pdb_files = [os.path.join(pdb_input_dir, f) for f in os.listdir(pdb_input_dir) if f.endswith('.pdb')]
     with open(pdb_input_json, 'w') as f:
         json.dump(pdb_files, f)
-
     print(f'pdb_input_json: {pdb_input_json}')
 	
-	# Specify the command to run
-    command = f'apptainer run --nv {container_path} LigandMPNN/run.py --pdb_path_multi {pdb_input_json} --out_folder {output_dir} --batch_size {num_designs}'
-
-    utils.run_command(command) # What do we do with errors? Raise error codes, display, ignore?
+    # Example implementation of running task defined in JSON:
+    utils.run_task("LigandMPNN", pdb_input_dir, output_dir, num_designs)
 	
     # Clean up the temporary directory. Eventually fix this using TempFile
     if pdb_input_file is not None:
         shutil.rmtree(temp_dir)
 
-    return #what? True if it worked? Error/completion code?
+    return 
 
 
 @ribbon_decorator('FastRelax')

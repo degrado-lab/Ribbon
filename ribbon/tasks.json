@@ -1,0 +1,9 @@
+{
+    "LigandMPNN": {
+        "name": "LigandMPNN",
+        "description": "Run LigandMPNN on a PDB file.",
+        "container": "LigandMPNN",
+        "command": "LigandMPNN/run.py --pdb_path_multi {pdb_input_json} --out_folder {output_dir} --batch_size {num_designs} {extra_args}",
+        "requirements": "None"
+    }
+}
