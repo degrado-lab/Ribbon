@@ -49,27 +49,25 @@ def fastrelax(output_dir, pdb_input_file=None, pdb_input_dir=None, container_pat
 
 	# If pdb_input_file is not None, copy the file to a temporary directory
     if pdb_input_file is not None:
-        # Create a temporary directory to store the input files
         temp_dir = tempfile.mkdtemp()
-        # Copy the input file to the temp_dir
         shutil.copy(pdb_input_file, temp_dir)
-        # Set the pdb_input_dir to the temp_dir
         pdb_input_dir = temp_dir
 
     # Make directories:
-    output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = make_directories(output_dir)
 
     # Join many PDBs into a string to pass to the command
-    pdb_list = pdb_input_dir.glob('*.pdb')
+    pdb_list = directory_to_list(pdb_input_dir, '.pdb')
     pdb_string = " ".join(map(str, pdb_list)) + " "
 	
 	# Specify the command to run
+    #example:
+    #ribbon.run_task("FastRelax", pdb_input_dir, output_dir)
     command = f'apptainer run --nv {container_path} relax -in:file:s {pdb_string} -out:path:pdb {output_dir} -out:path:score {output_dir}'
 
     utils.run_command(command) # What do we do with errors? Raise error codes, display, ignore?
 
-    return #what? True if it worked? Error/completion code?
+    return
 
 # Types of inputs:
 # FASTA_FILE
