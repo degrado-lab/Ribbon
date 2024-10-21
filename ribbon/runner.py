@@ -1,5 +1,4 @@
-#ribbon?
-from utils import ribbon_decorator, make_directories, directory_to_list
+from utils import make_directories, directory_to_list
 import os
 import tempfile
 import shutil
@@ -7,7 +6,7 @@ import json
 import utils
 from pathlib import Path
 
-@ribbon_decorator('LigandMPNN')
+#@ribbon_decorator('LigandMPNN')
 def ligandmpnn(output_dir, pdb_input_file=None, pdb_input_dir=None, num_designs=1, container_path=None):
 	# Must specify either pdb_input_file OR pdb_input_dir
     if pdb_input_file is None and pdb_input_dir is None:
@@ -41,7 +40,7 @@ def ligandmpnn(output_dir, pdb_input_file=None, pdb_input_dir=None, num_designs=
     return 
 
 
-@ribbon_decorator('FastRelax')
+#@ribbon_decorator('FastRelax')
 def fastrelax(output_dir, pdb_input_file=None, pdb_input_dir=None, container_path=None):
 	# Must specify either pdb_input_file OR pdb_input_dir
     if pdb_input_file is None and pdb_input_dir is None:
@@ -74,6 +73,7 @@ def run_task(task_name, extra_args="", **kwargs ):
     ''' Run a task with the given name and arguments.
     Inputs:
         task_name: str - the name of the task to run
+        extra_args: str - additional arguments to pass to the task, which is optional. E.g. '--save_frequency 10 --num_steps 1000'
         kwargs: dict - the arguments to pass to the task. These are task-specific.
     Outputs:
         None
@@ -91,10 +91,27 @@ def run_task(task_name, extra_args="", **kwargs ):
             raise ValueError(f'Input {input} is required for task {task_name}')
         print(f'{input}: {kwargs[input]}')
 
-# Types of inputs:
-# FASTA_FILE
-# FASTA_DIR
-# PDB_FILE
-# PDB_DIR
+    # Get Information about the task:
+    task_dict = utils.get_task_dict(task_name)
+    task_name = task_dict['name']
+    container_name = task_dict['container']
+    print('Task name:', task_name)
+    print('Task description:', task_dict['description'])
+
+    # Verify we have the container associated with the software we want to run. 
+    # If not, attempt to download it to the download_dir
+    container_path = utils.verify_container(container_name)
+
+    # Add inputs to the command, by replacing the placeholders in the command string:
+    command = task_dict['command']
+    for input in required_inputs:
+        command = command.replace(f'{{{input}}}', str(kwargs[input]))
+    
+    print('Command:', command)
+
+    # Run the task
+    apptainer_command = f'apptainer run --nv {container_path} {command}'
+    utils.run_command(apptainer_command)
+
 
 run_task("LigandMPNN", pdb_input_json='test', output_dir='test', num_designs=1, extra_args='--butt face')

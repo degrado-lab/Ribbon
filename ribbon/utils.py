@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 from config import DOWNLOAD_DIR
 
+MODULE_DIR = Path(__file__).resolve().parent
 
 def directory_to_list(directory, extension):
     '''Returns a list of files in a directory with a given extension'''
@@ -19,24 +20,24 @@ def make_directories(*directories):
         directory.mkdir(parents=True, exist_ok=True)
     return directories
 
-def ribbon_decorator(software_name):
-    def ribbon_decorator_internal(func):
-        def wrapper(*args, **kwargs):
+# def ribbon_decorator(software_name):
+#     def ribbon_decorator_internal(func):
+#         def wrapper(*args, **kwargs):
 
-                # Verify we have the container associated with the software we want to run. 
-                # If not, attempt to download it to the download_dir
-                container_path = verify_container(software_name)
+#                 # Verify we have the container associated with the software we want to run. 
+#                 # If not, attempt to download it to the download_dir
+#                 container_path = verify_container(software_name)
 
-                return func(*args, **kwargs, container_path=container_path)
+#                 return func(*args, **kwargs, container_path=container_path)
         
-        return wrapper
+#         return wrapper
     
-    return ribbon_decorator_internal
+#     return ribbon_decorator_internal
 
 def verify_container(software_name):
    # Get the container local path and ORAS URL:
     import json
-    with open('containers.json') as f:
+    with open(MODULE_DIR / 'containers.json') as f:
         containers = json.load(f)
 
     # Our database maps software names to container names and ORAS URLs
@@ -58,14 +59,18 @@ def download_container(container_local_path, container_ORAS_URL):
 
     return # Get error codes, etc.
 
-def get_task_inputs(task_name):
-    '''Returns the inputs required for a given task'''
+def get_task_dict(task_name):
+    '''Returns the dictionary for a given task'''
     # Which inputs does our task require?
-    with open('tasks.json') as f:
+    with open(MODULE_DIR / 'tasks.json') as f:
         tasks = json.load(f)
 
+    return tasks[task_name]
+
+def get_task_inputs(task_name):
+    '''Returns the inputs required for a given task'''
     #Get the command:
-    command = tasks[task_name]['command']
+    command = get_task_dict(task_name)['command']
 
     #Inputs are surrounded by curly braces. Here we extract them.
     inputs = [i[1:-1] for i in command.split() if i.startswith('{') and i.endswith('}')]
