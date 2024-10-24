@@ -2,9 +2,7 @@ import os
 import subprocess
 from pathlib import Path
 import json
-from config import DOWNLOAD_DIR
-
-MODULE_DIR = Path(__file__).resolve().parent
+from ribbon.config import DOWNLOAD_DIR, MODULE_DIR
 
 def directory_to_list(directory, extension):
     '''Returns a list of files in a directory with a given extension'''
@@ -20,19 +18,12 @@ def make_directories(*directories):
         directory.mkdir(parents=True, exist_ok=True)
     return directories
 
-# def ribbon_decorator(software_name):
-#     def ribbon_decorator_internal(func):
-#         def wrapper(*args, **kwargs):
-
-#                 # Verify we have the container associated with the software we want to run. 
-#                 # If not, attempt to download it to the download_dir
-#                 container_path = verify_container(software_name)
-
-#                 return func(*args, **kwargs, container_path=container_path)
-        
-#         return wrapper
-    
-#     return ribbon_decorator_internal
+def make_directory(directory):
+    '''Creates a directory if it does not exist. 
+    Returns a Path object, in case it was a string.'''
+    if not isinstance(directory, Path):
+        directory = make_directories(directory)[0]
+    return directory
 
 def verify_container(software_name):
    # Get the container local path and ORAS URL:
@@ -53,6 +44,9 @@ def verify_container(software_name):
     return container_local_path
 
 def download_container(container_local_path, container_ORAS_URL):
+    # Make sure downloads directory exists:
+    make_directories(DOWNLOAD_DIR)
+
     # Download the container to the download_dir
     command = f'apptainer pull {container_local_path} {container_ORAS_URL}'
     run_command(command)
@@ -74,13 +68,18 @@ def get_task_inputs(task_name):
 
     #Inputs are surrounded by curly braces. Here we extract them.
     inputs = [i[1:-1] for i in command.split() if i.startswith('{') and i.endswith('}')]
+
+    #Remove duplicates:
+    inputs = list(set(inputs))
     
     return inputs
 
 def run_command(command):
 	# Run the container
-    subprocess.run(command, shell=True) #command.split() ?
-
+    subprocess.run(command, shell=True)
+    #print(result.stdout)
+    #if result.stderr:
+    #    print(result.stderr)
     return # Get error codes, etc.
 	
     

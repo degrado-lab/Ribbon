@@ -5,5 +5,26 @@
         "container": "LigandMPNN",
         "command": "LigandMPNN/run.py --pdb_path_multi {pdb_input_json} --out_folder {output_dir} --batch_size {num_designs} {extra_args}",
         "requirements": "None"
+    },
+    "FastRelax": {
+        "name": "FastRelax",
+        "description": "Run FastRelax on a PDB file.",
+        "container": "Rosetta",
+        "command": "relax -in:file:s {pdb_string} -out:path:pdb {output_dir} -out:path:score {output_dir} {extra_args}",
+        "requirements": "None"
+    },
+    "Chai-1": {
+        "name": "Chai-1",
+        "description": "Run Chai-1 structure prediction on a FASTA file and SMILES.",
+        "container": "Chai-1",
+        "command": "python $RIBBON_MODULE_DIR/task_scripts/chai-1/predict_structure.py {fasta_file} \" {smiles_string} \" {output_dir} {extra_args}",
+        "requirements": "None"
+    },
+    "Calculate Distance": {
+        "name": "Calculate Distance",
+        "description": "Calculate the distance between two atoms in a PDB file.",
+        "container": "BioPython",
+        "command": "python3 $RIBBON_MODULE_DIR/task_scripts/biopython/calculate_distance.py {pdb_file} {chain1_id} {res1_id} {atom1_name} {chain2_id} {res2_id} {atom2_name} --output_file {output_file}",
+        "requirements": "None"
     }
 }
