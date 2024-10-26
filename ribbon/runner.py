@@ -40,6 +40,6 @@ def run_task(task_name, extra_args="", **kwargs ):
     print('- Command:', command)
 
     # Run the task
-    apptainer_command = f'apptainer run --nvccli {container_path} {command}'
+    apptainer_command = f'apptainer run --nv {container_path} {command}'
     utils.run_command(apptainer_command)
     print('--------------------------------------------')

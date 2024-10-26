@@ -32,8 +32,8 @@ def ligandmpnn(output_dir, pdb_input_file=None, pdb_input_dir=None, num_designs=
     # Make directories:
     output_dir, pdb_input_dir = make_directories(output_dir, pdb_input_dir)
 
-    # Compile all our PDB files into a list:
-    pdb_files = directory_to_list(pdb_input_dir, '.pdb')
+    # Compile all our PDB and/or CIF files into a list:
+    pdb_files = directory_to_list(pdb_input_dir, '.pdb') + directory_to_list(pdb_input_dir, '.cif')
 
     # Then, write out the files within pdb_input_dir to a json file:
     pdb_input_json = output_dir / 'pdb_input.json'
