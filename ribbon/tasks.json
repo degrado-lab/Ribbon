@@ -26,5 +26,12 @@
         "container": "BioPython",
         "command": "python3 $RIBBON_MODULE_DIR/task_scripts/biopython/calculate_distance.py {pdb_file} {chain1_id} {res1_id} {atom1_name} {chain2_id} {res2_id} {atom2_name} --output_file {output_file}",
         "requirements": "None"
+    },
+    "Calculate SASA": {
+        "name": "Calculate SASA",
+        "description": "Calculate the solvent accessible surface area of an object in a PDB file.",
+        "container": "BioPython",
+        "command": "python3 $RIBBON_MODULE_DIR/task_scripts/biopython/calculate_sasa.py {pdb_file} --output_file {output_file} {extra_args}",
+        "requirements": "None"
     }
 }

@@ -137,9 +137,9 @@ def calculate_distance(pdb_file, chain1_id, res1_id, atom1_name, chain2_id, res2
         chain2_id (str): Chain ID of the second atom
         res2_id (str): Residue ID of the second atom
         atom2_name (str): Name of the second atom
-        output_file (str): Path to the output file
+        output_file (str): Path to the output file. Suffixed with '.dist'
     Returns:
-        distance (float): The distance between the two atoms
+        None
     '''
     # Make directories:
     make_directory(Path(output_file).parent)
@@ -154,6 +154,36 @@ def calculate_distance(pdb_file, chain1_id, res1_id, atom1_name, chain2_id, res2
                 res2_id = res2_id,
                 atom2_name = atom2_name,
                 output_file = output_file,
+                device=device)
+
+    return
+
+def calculate_SASA(pdb_file, output_file, chain_id=None, res_id=None, device='cpu'):
+    ''' Calculate the distance between two atoms in a PDB file.
+    Args:
+        pdb_file (str):             Path to the PDB file
+        output_file (str):          Path to the output file. Suffixed with '.sasa'
+        chain_id (str), Optional:   Chain ID of the object to calculate SASA for.
+        res_id (str), Optional:     Residue ID of the object to calculate SASA for. If provided, chain_id must also be provided.
+    Returns:
+        None
+    '''
+    # Make directories:
+    make_directory(Path(output_file).parent)
+
+    extra_args = ""
+    if chain_id is not None:
+        extra_args += f" --chain_id {chain_id}"
+    if res_id is not None:
+        if chain_id is None:
+            raise ValueError("If res_id is provided, chain_id must also be provided.")
+        extra_args += f" --res_id {res_id}"
+
+    # Run the task:
+    run_task("Calculate Distance", 
+                pdb_file = pdb_file,
+                output_file = output_file,
+                extra_args = extra_args,
                 device=device)
 
     return
