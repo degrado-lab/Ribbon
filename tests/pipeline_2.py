@@ -14,8 +14,7 @@ INPUT_SMILES = 'O=C1C=C(C)C(C=CC2=C3C=NO2)=C3O1'
 RESIDUES_TO_KEEP = 'A99'
 
 # Number of cycles
-NUM_CYCLES = 20
-
+NUM_CYCLES = 5
 
 ###### CREATE DIRECTORIES ######
 cycle_start_dir = run_dir / 'cycle_start'
@@ -55,11 +54,10 @@ for i in range(NUM_CYCLES):
 	tasks.ligandmpnn(
 		LMPNN_dir,
 		structure_list=old_structures_list,
-		num_designs=5,										# Generate 5 sequences per previous structure
+		num_designs=2,										# Generate 5 sequences per previous structure
 		extra_args= '--fixed_residues ' + RESIDUES_TO_KEEP	# Make sure to keep my catalytric residue
 	)
-
-
+	
 	######## RUN CHAI-1 #########
 	sequences_list = list_files(LMPNN_dir / 'seqs_split', '.fasta')
 
@@ -70,7 +68,6 @@ for i in range(NUM_CYCLES):
 			smiles_string = INPUT_SMILES,
 			output_prefix = file.stem, # Our output will be named this, + '_pred_X.cif'
 			output_dir = Chai_dir,
-			device = 'gpu_wsl'
 		)
 
 
@@ -90,7 +87,7 @@ for i in range(NUM_CYCLES):
 			res2_id = '1',
 			atom2_name = 'C_10',
 			#Output file:
-			output_file = distance_dir / f'{file.stem}.dist'
+			output_file = distance_dir / f'{Path(file).stem}.dist'
 		)
 
 
@@ -99,6 +96,7 @@ for i in range(NUM_CYCLES):
 
 	distance_dict = {}
 	for file in distance_files:
+		file = Path(file)
 		# Write out the distance to a dictionary:
 		with open(file) as f:
 			distance = float(f.read())
@@ -111,7 +109,6 @@ for i in range(NUM_CYCLES):
 		# Copy the design:
 		shutil.copy(Chai_dir / design, top_design_dir / design)
 
-	
 	######## UPDATE DIRECTORIES #########
 	previous_dir = current_dir
 
