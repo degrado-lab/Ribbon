@@ -4,7 +4,11 @@ from pathlib import Path
 import json
 from ribbon.config import DOWNLOAD_DIR, MODULE_DIR
 
-def directory_to_list(directory, extension):
+#def directory_to_list(directory, extension):
+#    '''Returns a list of files in a directory with a given extension'''
+#    return [os.path.join(directory, f) for f in os.listdir(directory) if f.endswith(extension)]
+
+def list_files(directory, extension):
     '''Returns a list of files in a directory with a given extension'''
     return [os.path.join(directory, f) for f in os.listdir(directory) if f.endswith(extension)]
 

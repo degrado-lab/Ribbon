@@ -33,6 +33,13 @@ def make_chai_fasta(input_fasta, output_fasta, smiles):
         outfile.write(f">ligand|name=LIG\n")
         outfile.write(f"{smiles}\n")
 
+def rename_files(output_dir, prefix):
+    for file in output_dir.iterdir():
+        if file.suffix == ".cif":
+            new_name = file.stem.replace("pred.model", prefix)
+            new_file = file.with_name(new_name + ".cif")
+            file.rename(new_file)
+
 if __name__=="__main__":
 
     # Parse arguments
@@ -56,18 +63,26 @@ if __name__=="__main__":
     # Make a new FASTA file with the SMILES string as tempfile:
     temp_fasta = tempfile.NamedTemporaryFile(delete=False)
     make_chai_fasta(fasta_file, temp_fasta.name, smiles)
+
+    # Store initial outputs to a temporary directory:
+    temp_output = tempfile.TemporaryDirectory()
     
     fasta_path = Path(fasta_file)
-    output_dir = Path(output_dir)
+    
     output_cif_paths = run_inference(
         fasta_file=Path(temp_fasta.name),
-        output_dir=output_dir,
+        output_dir=temp_output,
         num_trunk_recycles=num_trunk_recycles,
         num_diffn_timesteps=num_diffn_timesteps,
         seed=seed,
         device=torch.device("cuda:0"),
         use_esm_embeddings=True,
     )
+
+    # Rename the output files and move them to the output directory:
+    rename_files(Path(temp_output.name), fasta_path.stem)
+    for file in Path(temp_output.name).iterdir():
+        file.rename(output_dir / file.name)
 
 # Load pTM, ipTM, pLDDTs and clash scores for sample 2
 #scores = np.load(output_dir.joinpath("scores.model_idx_2.npz"))
