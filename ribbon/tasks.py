@@ -50,7 +50,7 @@ def ligandmpnn(output_dir, structure_list, num_designs=1, extra_args="", device=
                 print(f'Writing to {output_path}')
                 with open(output_path, 'w') as g:
                     for chain_index, chain in enumerate(chains):
-                        name_with_chain = f'{name.split(',')[0]}_{chain_index}' +', ' + ','.join(name.split(',')[1:])# Add chain to name
+                        name_with_chain = f"{name.split(',')[0]}_{chain_index}" +', ' + ','.join(name.split(',')[1:])# Add chain to name
                         g.write(f'{name_with_chain}\n{chain}\n')
 
     # Make directories:
@@ -122,14 +122,9 @@ def chai1(fasta_file, smiles_string, output_prefix, output_dir, device='gpu'):
                 fasta_file = fasta_file,
                 smiles_string = smiles_string, 
                 output_dir = str(output_dir),
+                output_prefix = output_prefix,
                 device=device)
     
-    # Rename the output files:
-    for file in output_dir.iterdir():
-        if file.suffix == '.cif':
-            new_name = output_dir / f'{output_prefix}_{file.stem}.cif'
-            file.rename(new_name)
-
     return
 
 def calculate_distance(pdb_file, chain1_id, res1_id, atom1_name, chain2_id, res2_id, atom2_name, output_file, device='cpu'):

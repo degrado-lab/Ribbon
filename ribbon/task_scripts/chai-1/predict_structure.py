@@ -8,6 +8,7 @@ import torch
 from chai_lab.chai1 import run_inference
 import argparse
 import tempfile
+import shutil
 
 
 ''' 
@@ -35,9 +36,9 @@ def make_chai_fasta(input_fasta, output_fasta, smiles):
 
 def rename_files(output_dir, prefix):
     for file in output_dir.iterdir():
-        if file.suffix == ".cif":
-            new_name = file.stem.replace("pred.model", prefix)
-            new_file = file.with_name(new_name + ".cif")
+        if file.suffix in [".cif", ".npz"]:
+            new_name = file.stem.replace("pred.model", prefix).replace("scores.model", prefix)
+            new_file = file.with_name(new_name + file.suffix)
             file.rename(new_file)
 
 if __name__=="__main__":
@@ -71,7 +72,7 @@ if __name__=="__main__":
     
     output_cif_paths = run_inference(
         fasta_file=Path(temp_fasta.name),
-        output_dir=temp_output,
+        output_dir=Path(temp_output.name),
         num_trunk_recycles=num_trunk_recycles,
         num_diffn_timesteps=num_diffn_timesteps,
         seed=seed,
@@ -82,7 +83,7 @@ if __name__=="__main__":
     # Rename the output files and move them to the output directory:
     rename_files(Path(temp_output.name), fasta_path.stem)
     for file in Path(temp_output.name).iterdir():
-        file.rename(output_dir / file.name)
+        shutil.move(str(file), str(Path(output_dir) / file.name))
 
 # Load pTM, ipTM, pLDDTs and clash scores for sample 2
 #scores = np.load(output_dir.joinpath("scores.model_idx_2.npz"))
