@@ -1,4 +1,4 @@
-from ribbon import tasks
+from ribbon.tasks import tasks
 from pathlib import Path
 import shutil
 

@@ -1,4 +1,4 @@
-from ribbon import tasks
+from ribbon.tasks import tasks
 from ribbon.utils import make_directories, list_files
 from pathlib import Path
 import shutil
@@ -23,7 +23,6 @@ make_directories(run_dir, initial_structures_dir)
 # And, copy our inputs: 
 for file in input_dir.iterdir():
     shutil.copy(file, cycle_start_dir / "Top_Designs" )
-
 
 ###### MAIN LOOP #######
 
