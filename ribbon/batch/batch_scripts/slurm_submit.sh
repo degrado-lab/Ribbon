@@ -8,6 +8,8 @@
 echo "Running on $(hostname)"
 echo "Starting at $(date)"
 
+echo apptainer run $ribbon_container $ribbon_deserialize_script $serialized_job
+
 apptainer run $ribbon_container $ribbon_deserialize_script $serialized_job
 
 ## End-of-job summary, if running as a job

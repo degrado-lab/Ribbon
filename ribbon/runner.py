@@ -31,7 +31,7 @@ class Task:
         serialized_task = utils.serialize(self)
 
         # Correct the scheduler script mapping:
-        batch_script_dir = Path(MODULE_DIR) / 'batch' / 'batch_script'
+        batch_script_dir = Path(MODULE_DIR) / 'batch' / 'batch_scripts'
         scheduler_script = {'SLURM': str(batch_script_dir / 'slurm_submit.sh'), 
                             'SGE':   str(batch_script_dir / 'sge_submit.sh')}[scheduler]
         
