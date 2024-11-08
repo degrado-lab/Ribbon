@@ -1,8 +1,10 @@
 import os
 import subprocess
 from pathlib import Path
-import json
-from ribbon.config import DOWNLOAD_DIR, MODULE_DIR
+import pickle
+from ribbon.config import DOWNLOAD_DIR, TASKS_DIR, TASK_CACHE_DIR
+import uuid
+import datetime
 
 #def directory_to_list(directory, extension):
 #    '''Returns a list of files in a directory with a given extension'''
@@ -15,24 +17,26 @@ def list_files(directory, extension):
 def make_directories(*directories):
     '''Creates directories if they do not exist. 
     Returns a list of Path objects, in case they were strings.'''
+    new_directories = []
     for directory in directories:
         # Check it's a Path object:
         if not isinstance(directory, Path):
             directory = Path(directory)
         directory.mkdir(parents=True, exist_ok=True)
-    return directories
+        new_directories.append(directory)
+    return new_directories
 
 def make_directory(directory):
     '''Creates a directory if it does not exist. 
     Returns a Path object, in case it was a string.'''
-    if not isinstance(directory, Path):
-        directory = make_directories(directory)[0]
+    directory = make_directories(directory)[0]
     return directory
 
 def verify_container(software_name):
    # Get the container local path and ORAS URL:
     import json
-    with open(MODULE_DIR / 'containers.json') as f:
+    print('TASKS_DIR:', TASKS_DIR)
+    with open( TASKS_DIR / 'containers.json') as f:
         containers = json.load(f)
 
     # Our database maps software names to container names and ORAS URLs
@@ -57,33 +61,60 @@ def download_container(container_local_path, container_ORAS_URL):
 
     return # Get error codes, etc.
 
-def get_task_dict(task_name):
-    '''Returns the dictionary for a given task'''
-    # Which inputs does our task require?
-    with open(MODULE_DIR / 'tasks.json') as f:
-        tasks = json.load(f)
-
-    return tasks[task_name]
-
-def get_task_inputs(task_name):
-    '''Returns the inputs required for a given task'''
-    #Get the command:
-    command = get_task_dict(task_name)['command']
-
-    #Inputs are surrounded by curly braces. Here we extract them.
-    inputs = [i[1:-1] for i in command.split() if i.startswith('{') and i.endswith('}')]
-
-    #Remove duplicates:
-    inputs = list(set(inputs))
-    
-    return inputs
-
-def run_command(command):
+def run_command(command, capture_output=False):
+    '''
+    Runs a command in the shell.
+    If capture_output=True, returns the stdout and stderr.
+    Otherwise, returns prints the stdout and stderr.
+    '''
 	# Run the container
-    subprocess.run(command, shell=True)
-    #print(result.stdout)
-    #if result.stderr:
-    #    print(result.stderr)
-    return # Get error codes, etc.
+    stdout, stderr = None, None
+    if capture_output:
+        process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # return stdout and stderr
+        stdout, stderr = process.stdout.decode('utf-8'), process.stderr.decode('utf-8')
+    else:
+        process = subprocess.run(command, shell=True)
+    return stdout, stderr
 	
+def serialize(obj, save_dir=None):
+    '''Saves a Python object to a file. A random filename is generated, and it is saved to the save_dir.
+    Returns: the filename of the saved object.'''
+    if save_dir is None:
+        save_dir = TASK_CACHE_DIR
+    # Make sure the directory exists:
+    print(save_dir)
+    save_dir = make_directory(save_dir)
+
+    print('Saving object to:', save_dir)
+
+    # Generate a random filename:
+    filename = save_dir / f'{uuid.uuid4()}.pkl'
+
+    # Save the object:
+    with open(filename, 'wb') as f:
+        pickle.dump(obj, f)
+
+    return filename
+
+def deserialize(filename, cache_dir=None):
+    '''Loads a Python object from a file'''
+
+    # Make sure we have the full path:
+    if cache_dir is None:
+        cache_dir = TASK_CACHE_DIR
+    cache_dir = make_directory(cache_dir)
+
+    filename = Path(filename)
+    if not filename.is_absolute():
+        filename = cache_dir / filename
     
+    with open(filename, 'rb') as f:
+        return pickle.load(f)
+    
+def clean(all=False):
+    ''' Cleans the cache directory. If all=True, deletes all files. Otherwise, deletes only files that are older than 1 day.'''
+    for file in os.listdir(TASK_CACHE_DIR):
+        file = Path(file)
+        if all or (datetime.datetime.now() - datetime.datetime.fromtimestamp(file.stat().st_mtime)).days > 1:
+            os.remove(file)

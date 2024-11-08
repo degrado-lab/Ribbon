@@ -1,0 +1,10 @@
+Bootstrap: docker
+From: nicholasfreitas/ribbon:docker
+
+%environment
+    # Set up environment variables
+    export PATH="/opt/conda/bin:$PATH"
+
+%runscript
+    # Run script that executes when the container is started
+    exec "$@"
