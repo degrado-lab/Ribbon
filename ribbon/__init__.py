@@ -36,6 +36,3 @@ else:
     # Import the default ribbon_tasks package
     import ribbon_tasks
     from ribbon_tasks import *
-
-# Import defined tasks so users can execute like: ribbon.ligandmpnn()
-from ribbon_tasks import *

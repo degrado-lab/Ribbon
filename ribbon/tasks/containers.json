@@ -1,7 +1,0 @@
-{
-    "LigandMPNN": ["ligandMPNN.sif", "oras://docker.io/nicholasfreitas/ligandmpnn:latest"],
-    "Rosetta":  ["rosetta.sif", "oras://docker.io/nicholasfreitas/rosetta:latest"],
-    "BioPython":  ["biopython.sif", "oras://docker.io/nicholasfreitas/biopython:latest"],
-    "Chai-1":     ["chai-1.sif", "oras://docker.io/nicholasfreitas/chai-1:latest"],
-    "Ribbon":     ["ribbon.sif", "oras://docker.io/nicholasfreitas/ribbon:latest"]
-}
