@@ -3,6 +3,7 @@ import ribbon.batch.queue_utils as queue_utils
 from pathlib import Path
 from ribbon.config import TASKS_DIR, MODULE_DIR
 import json
+import os
 
 class Task:
     def __init__(self, device='gpu', extra_args=""):
@@ -43,7 +44,8 @@ class Task:
         # Prepare job variables:
         job_variables = f"ribbon_container={container_path}," \
                         f"ribbon_deserialize_script={deserialize_script}," \
-                        f"serialized_job={serialized_task}"
+                        f"serialized_job={serialized_task}," \
+                        f"RIBBON_TASKS_DIR={os.getenv('RIBBON_TASKS_DIR')}"
 
         # Prepare the resources:
         resources = {'time': time, 'mem': mem}
