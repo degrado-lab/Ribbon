@@ -36,7 +36,6 @@ def verify_container(software_name):
    # Get the container local path and ORAS URL:
     import json
     print('TASKS_DIR:', TASKS_DIR)
-    print('RIBBON_TASKS_DIR:', os.environ['RIBBON_TASKS_DIR'])
     with open( TASKS_DIR / 'containers.json') as f:
         containers = json.load(f)
 

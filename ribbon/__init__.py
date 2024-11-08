@@ -13,9 +13,15 @@ if custom_tasks_path:
     # Validate that the specified path exists
     if not os.path.isdir(custom_tasks_path):
         raise FileNotFoundError(f"The directory '{custom_tasks_path}' does not exist.")
+    
+    # To import, we need to go up one level:
+    #print(custom_tasks_path)
+    #custom_tasks_path = os.path.dirname(custom_tasks_path)
 
     # Construct the path to the ribbon_tasks package
-    ribbon_tasks_path = os.path.join(custom_tasks_path, 'ribbon_tasks')
+    ribbon_tasks_path = custom_tasks_path
+
+    print(f"Importing custom 'ribbon_tasks' package from '{ribbon_tasks_path}'")
 
     if not os.path.isdir(ribbon_tasks_path):
         raise FileNotFoundError(f"'ribbon_tasks' package not found in '{custom_tasks_path}'.")
@@ -34,4 +40,5 @@ if custom_tasks_path:
         sys.path.pop(0)
 else:
     # Import the default ribbon_tasks package
-    from .ribbon_tasks import *
+    print("Importing default 'ribbon_tasks' package")
+    from .ribbon_tasks.ribbon_tasks import *
