@@ -17,28 +17,28 @@
         "name": "Chai-1",
         "description": "Run Chai-1 structure prediction on a FASTA file and SMILES.",
         "container": "Chai-1",
-        "command": "python $RIBBON_MODULE_DIR/task_scripts/chai-1/predict_structure.py {fasta_file} \" {smiles_string} \" {output_dir} {extra_args}",
+        "command": "python $RIBBON_MODULE_DIR/tasks/task_scripts/chai-1/predict_structure.py {fasta_file} \" {smiles_string} \" {output_dir} {extra_args}",
         "requirements": "None"
     },
     "Calculate Distance": {
         "name": "Calculate Distance",
         "description": "Calculate the distance between two atoms in a PDB file.",
         "container": "BioPython",
-        "command": "python3 $RIBBON_MODULE_DIR/task_scripts/biopython/calculate_distance.py {pdb_file} {chain1_id} {res1_id} {atom1_name} {chain2_id} {res2_id} {atom2_name} --output_file {output_file}",
+        "command": "python3 $RIBBON_MODULE_DIR/tasks/task_scripts/biopython/calculate_distance.py {pdb_file} {chain1_id} {res1_id} {atom1_name} {chain2_id} {res2_id} {atom2_name} --output_file {output_file}",
         "requirements": "None"
     },
     "Calculate SASA": {
         "name": "Calculate SASA",
         "description": "Calculate the solvent accessible surface area of an object in a PDB file.",
         "container": "BioPython",
-        "command": "python3 $RIBBON_MODULE_DIR/task_scripts/biopython/calculate_sasa.py {pdb_file} --output_file {output_file} {extra_args}",
+        "command": "python3 $RIBBON_MODULE_DIR/tasks/task_scripts/biopython/calculate_sasa.py {pdb_file} --output_file {output_file} {extra_args}",
         "requirements": "None"
     },
     "Calculate Plane Angle": {
         "name": "Calculate Plane Angle",
         "description": "Calculate the angle between two planes in a PDB file.",
         "container": "BioPython",
-        "command": "python3 $RIBBON_MODULE_DIR/task_scripts/biopython/calculate_plane_angle.py {pdb_file} {atom_1} {atom_2} {atom_3} {atom_4} {atom_5} {atom_6} --output_file {output_file}",
+        "command": "python3 $RIBBON_MODULE_DIR/tasks/task_scripts/biopython/calculate_plane_angle.py {pdb_file} {atom_1} {atom_2} {atom_3} {atom_4} {atom_5} {atom_6} --output_file {output_file}",
         "requirements": "None"
     }
 }

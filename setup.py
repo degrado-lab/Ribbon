@@ -7,6 +7,13 @@ setup(
     author='Nicholas Freitas',
     author_email='nicholas.freitas@ucsf.edu',
     packages=find_packages(),
+    # Include all packages under your_package_name
+    include_package_data=True,
+    package_data={
+        # If any package contains *.json files, include them
+        'ribbon': ['tasks/**/*'],
+        'batch': ['batch/**/*'],
+    },
     install_requires=[],
     classifiers=[
         # See https://pypi.org/classifiers/ for the full list

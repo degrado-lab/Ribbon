@@ -30,14 +30,19 @@ class Task:
         # Serialize the task object to a pickle file:
         serialized_task = utils.serialize(self)
 
+        # Retrieve the Ribbon container:
+        container_name = 'Ribbon'
+        container_path = utils.verify_container(container_name)
+
         # Correct the scheduler script mapping:
         batch_script_dir = Path(MODULE_DIR) / 'batch' / 'batch_scripts'
         scheduler_script = {'SLURM': str(batch_script_dir / 'slurm_submit.sh'), 
                             'SGE':   str(batch_script_dir / 'sge_submit.sh')}[scheduler]
+        deserialize_script = Path(MODULE_DIR) / 'deserialize_and_run.py'
         
         # Prepare job variables:
-        job_variables = f"ribbon_container={serialized_task}," \
-                        f"ribbon_deserialize_script={scheduler_script}," \
+        job_variables = f"ribbon_container={container_path}," \
+                        f"ribbon_deserialize_script={deserialize_script}," \
                         f"serialized_job={serialized_task}"
 
         # Prepare the resources:
@@ -71,7 +76,10 @@ class Task:
             raise ValueError(f"Unsupported scheduler: {scheduler}")
 
         # Run the task:
-        job_id = utils.run_command(command)
+        stdout, stderr = utils.run_command(command, capture_output=True)
+
+        # Parse the job ID from the output:
+        job_id = int(stdout.split()[-1])
 
         return job_id
     

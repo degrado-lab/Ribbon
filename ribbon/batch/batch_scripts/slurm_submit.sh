@@ -8,9 +8,9 @@
 echo "Running on $(hostname)"
 echo "Starting at $(date)"
 
-echo apptainer run $ribbon_container $ribbon_deserialize_script $serialized_job
+echo apptainer run $ribbon_container python $ribbon_deserialize_script $serialized_job
 
-apptainer run $ribbon_container $ribbon_deserialize_script $serialized_job
+apptainer run $ribbon_container python $ribbon_deserialize_script $serialized_job
 
 ## End-of-job summary, if running as a job
 [[ -n "$SLURM_JOB_ID" ]] && scontrol show job "$SLURM_JOB_ID"  # This is useful for debugging and usage purposes,

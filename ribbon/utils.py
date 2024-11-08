@@ -60,13 +60,21 @@ def download_container(container_local_path, container_ORAS_URL):
 
     return # Get error codes, etc.
 
-def run_command(command):
+def run_command(command, capture_output=False):
+    '''
+    Runs a command in the shell.
+    If capture_output=True, returns the stdout and stderr.
+    Otherwise, returns prints the stdout and stderr.
+    '''
 	# Run the container
-    subprocess.run(command, shell=True)
-    #print(result.stdout)
-    #if result.stderr:
-    #    print(result.stderr)
-    return # Get error codes, etc.
+    stdout, stderr = None, None
+    if capture_output:
+        process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # return stdout and stderr
+        stdout, stderr = process.stdout.decode('utf-8'), process.stderr.decode('utf-8')
+    else:
+        process = subprocess.run(command, shell=True)
+    return stdout, stderr
 	
 def serialize(obj, save_dir=None):
     '''Saves a Python object to a file. A random filename is generated, and it is saved to the save_dir.
