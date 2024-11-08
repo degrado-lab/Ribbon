@@ -1,7 +1,7 @@
 import ribbon.utils as utils
 import ribbon.batch.queue_utils as queue_utils
 from pathlib import Path
-from ribbon.config import MODULE_DIR
+from ribbon.config import TASKS_DIR, MODULE_DIR
 import json
 
 class Task:
@@ -134,7 +134,7 @@ class Task:
     def _get_task_dict(self, task_name):
         '''Returns the dictionary for a given task'''
         # Which inputs does our task require?
-        with open(MODULE_DIR / 'tasks' / 'tasks.json') as f:
+        with open(TASKS_DIR / 'tasks.json') as f:
             tasks = json.load(f)
 
         return tasks[task_name]

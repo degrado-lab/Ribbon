@@ -11,7 +11,7 @@ setup(
     include_package_data=True,
     package_data={
         # If any package contains *.json files, include them
-        'ribbon': ['tasks/**/*'],
+        'ribbon_tasks': ['ribbon_tasks/**/*'],
         'batch': ['batch/**/*'],
     },
     install_requires=[],

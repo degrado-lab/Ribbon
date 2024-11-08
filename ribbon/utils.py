@@ -2,7 +2,7 @@ import os
 import subprocess
 from pathlib import Path
 import pickle
-from ribbon.config import DOWNLOAD_DIR, MODULE_DIR, TASK_CACHE_DIR
+from ribbon.config import DOWNLOAD_DIR, TASKS_DIR, TASK_CACHE_DIR
 import uuid
 import datetime
 
@@ -35,7 +35,9 @@ def make_directory(directory):
 def verify_container(software_name):
    # Get the container local path and ORAS URL:
     import json
-    with open(MODULE_DIR / 'tasks' / 'containers.json') as f:
+    print('TASKS_DIR:', TASKS_DIR)
+    print('RIBBON_TASKS_DIR:', os.environ['RIBBON_TASKS_DIR'])
+    with open( TASKS_DIR / 'containers.json') as f:
         containers = json.load(f)
 
     # Our database maps software names to container names and ORAS URLs

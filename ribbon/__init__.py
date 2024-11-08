@@ -7,7 +7,7 @@ import sys
 import importlib.util
 
 # Check for the environment variable
-custom_tasks_path = os.environ.get('RIBBON_TASKS_PATH')
+custom_tasks_path = os.environ.get('RIBBON_TASKS_DIR')
 
 if custom_tasks_path:
     # Validate that the specified path exists
@@ -34,5 +34,4 @@ if custom_tasks_path:
         sys.path.pop(0)
 else:
     # Import the default ribbon_tasks package
-    import ribbon_tasks
-    from ribbon_tasks import *
+    from .ribbon_tasks import *
