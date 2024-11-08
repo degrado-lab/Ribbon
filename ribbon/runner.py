@@ -81,7 +81,12 @@ class Task:
         stdout, stderr = utils.run_command(command, capture_output=True)
 
         # Parse the job ID from the output:
-        job_id = int(stdout.split()[-1])
+        if scheduler == 'SLURM':
+            job_id = queue_utils.parse_slurm_output(stdout)
+        elif scheduler == 'SGE':
+            job_id = queue_utils.parse_sge_output(stdout)
+        else:
+            raise ValueError(f"Unsupported scheduler: {scheduler}")
 
         return job_id
     

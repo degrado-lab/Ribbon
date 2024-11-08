@@ -30,6 +30,10 @@ def parse_slurm_resources(resources):
     resources_string = ' '.join(resources_list)
     return resources_string
 
+def parse_slurm_output(output):
+    job_id = int(output.split()[-1])
+    return job_id
+
 def generate_sge_command(resources, job_variables, scheduler_script):
     scheduler_command = 'qsub'
     # Map resources to SGE options
@@ -67,3 +71,7 @@ def parse_sge_resources(resources):
 
     resources_string = ' '.join(resources_list)
     return resources_string
+
+def parse_sge_output(output):
+    job_id = int(output.strip().split()[2])
+    return job_id
