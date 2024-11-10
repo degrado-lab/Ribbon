@@ -4,7 +4,7 @@ def generate_slurm_command(resources, other_resources, job_variables, scheduler_
     resources_string = parse_slurm_resources(resources)
     # Add other resources as-is, from dict:
     for key, value in other_resources.items():
-        if value is '': # If value is empty, assume it's a flag without a value
+        if value == '': # If value is empty, assume it's a flag without a value
             resources_string += f" {key}"
         else:
             resources_string += f" {key}={value}"
@@ -50,7 +50,7 @@ def generate_sge_command(resources, other_resources, job_variables, scheduler_sc
     resources_string = parse_sge_resources(resources)
     # Add other resources as-is, from dict:
     for key, value in other_resources.items():
-        if value is '': # If value is empty, assume it's a flag without a value
+        if value == '': # If value is empty, assume it's a flag without a value
             resources_string += f" {key}"
         else:
             if key.startswith('-l'):
