@@ -15,11 +15,15 @@ def parse_slurm_resources(resources):
         'job-name': '--job-name',
         'requeue': '--requeue',
         'output': '--output',
+        'queue': '--partition',
         # Add other resource mappings as needed
     }
 
     resources_list = []
     for key, value in resources.items():
+        if key not in resource_mappings:
+            print(f"Warning: Unrecognized resource key: {key}. Skipping.")
+            continue
         slurm_option = resource_mappings.get(key, key)
         if value is True:
             # Flags without values
@@ -45,11 +49,12 @@ def generate_sge_command(resources, job_variables, scheduler_script):
 def parse_sge_resources(resources):
     resource_mappings = {
         'time': '-l h_rt',
-        'mem': '-l h_vmem',
+        'mem': '-l mem_free',
         'dependency': '-hold_jid',
         'gpus': '-l gpu',
         'job-name': '-N',
         'output': '-o',
+        'queue': '-q',
         # Add other resource mappings as needed
     }
 
@@ -59,6 +64,9 @@ def parse_sge_resources(resources):
             # Handle dependencies specifically
             resources_list.append(f"-hold_jid {value}")
         else:
+            if key not in resource_mappings:
+                print(f"Warning: Unrecognized resource key: {key}. Skipping.")
+                continue
             sge_option = resource_mappings.get(key)
             if sge_option:
                 if sge_option.startswith('-l'):

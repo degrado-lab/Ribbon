@@ -6,14 +6,15 @@ import json
 import os
 
 class Task:
-    def __init__(self, device='gpu', extra_args=""):
+    def __init__(self, device='cpu', extra_args=""):
         self.device = device
         self.extra_args = extra_args
+        self.task_name = None
 
     def run(self):
         raise NotImplementedError(f"You are attempting to run a task { self.__class__.__name__ } without defining a run method.")
     
-    def queue(self, scheduler, depends_on=[], dependency_type='afterok', job_name=None, output_file=None, n_tasks=1, time='1:00:00', mem='2G', gpus=None, auto_restart=True, other_resources={}):
+    def queue(self, scheduler, depends_on=[], dependency_type='afterok', n_tasks=1, time='1:00:00', mem='2G', auto_restart=True, other_resources={}, job_name=None, output_file=None, queue=None,  gpus=None):
         ''' Queue the LigandMPNN task using the given scheduler.
         Inputs:
             scheduler: str - the name of the scheduler to use. Options are 'SLURM' or 'SGE'.
@@ -32,8 +33,13 @@ class Task:
         serialized_task = utils.serialize(self)
 
         # Retrieve the Ribbon container:
-        container_name = 'Ribbon'
-        container_path = utils.verify_container(container_name)
+        ribbon_container_name = 'Ribbon'
+        container_path = utils.verify_container(ribbon_container_name)
+
+        # Retrieve the job's container:
+        task_dict = self._get_task_dict(self.task_name)
+        job_container_name = task_dict['container']
+        utils.verify_container(job_container_name)
 
         # Correct the scheduler script mapping:
         batch_script_dir = Path(MODULE_DIR) / 'batch' / 'batch_scripts'
@@ -45,7 +51,9 @@ class Task:
         job_variables = f"ribbon_container={container_path}," \
                         f"ribbon_deserialize_script={deserialize_script}," \
                         f"serialized_job={serialized_task}," \
-                        f"RIBBON_TASKS_DIR={os.getenv('RIBBON_TASKS_DIR')}"
+                        f"RIBBON_TASKS_DIR={os.getenv('RIBBON_TASKS_DIR')}," \
+                        f"DEVICE={self.device}"
+        
 
         # Prepare the resources:
         resources = {'time': time, 'mem': mem}
@@ -66,6 +74,9 @@ class Task:
         if output_file:
             resources['output'] = output_file
 
+        if queue:
+            resources['queue'] = queue
+
         # Add other resources:
         resources.update(other_resources)
 
@@ -79,6 +90,8 @@ class Task:
 
         # Run the task:
         stdout, stderr = utils.run_command(command, capture_output=True)
+
+        print(stdout, stderr)
 
         # Parse the job ID from the output:
         if scheduler == 'SLURM':
@@ -132,9 +145,17 @@ class Task:
 
         # Set nvidia flag:
         nvidia_flag = {'gpu': '--nv', 'gpu_wsl': '--nvccli', 'cpu': ''}[device]
+
+        # Set user-provided environment variables:
+        env_variables_string = ''
+        if 'environment_variables' in task_dict:
+            if len(task_dict['environment_variables']) > 0:
+                env_variables_string = '--env '
+                # Join each key-value pair with a comma:
+                env_variables_string += ','.join([f'{key}={value}' for key, value in task_dict['environment_variables'].items()])
         
         # Run the task
-        apptainer_command = f'apptainer run {nvidia_flag} {container_path} {command}'
+        apptainer_command = f'apptainer run {nvidia_flag} {env_variables_string} {container_path} {command}'
         utils.run_command(apptainer_command)
         print('--------------------------------------------')
     

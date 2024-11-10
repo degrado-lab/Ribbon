@@ -69,6 +69,7 @@ def run_command(command, capture_output=False):
     '''
 	# Run the container
     stdout, stderr = None, None
+    print('Running command:', command)
     if capture_output:
         process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # return stdout and stderr
