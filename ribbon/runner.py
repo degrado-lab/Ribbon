@@ -14,7 +14,7 @@ class Task:
     def run(self):
         raise NotImplementedError(f"You are attempting to run a task { self.__class__.__name__ } without defining a run method.")
     
-    def queue(self, scheduler, depends_on=[], dependency_type='afterok', n_tasks=1, time='1:00:00', mem='2G', auto_restart=True, other_resources={}, job_name=None, output_file=None, queue=None,  gpus=None):
+    def queue(self, scheduler, depends_on=[], dependency_type='afterok', n_tasks=1, time='1:00:00', mem='2G', auto_restart=True, other_resources={}, job_name=None, output_file=None, queue=None,  gpus=None, node_name=None):
         ''' Queue the LigandMPNN task using the given scheduler.
         Inputs:
             scheduler: str - the name of the scheduler to use. Options are 'SLURM' or 'SGE'.
@@ -25,6 +25,10 @@ class Task:
             time: str - the time to allocate for the task. Default is '1:00:00'.
             mem: str - the memory to allocate for the task. Default is '2G'.
             gpus: int - the number of GPUs to allocate for the task. Default is None.
+            auto_restart: bool - whether to automatically restart the task if it fails. Default is True.
+            output_file: str - the file to write the output to. Default is None.
+            queue: str - the queue to submit the task to. Default is None.
+            node_name: str - the name of the node to run the task on. Default is None.
             other_resources: dict - other resources to allocate for the task. Has the form {"--option": "value"}. Default is empty dict.
         Outputs:
             job_id: str - the ID of the job in the scheduler.
@@ -55,7 +59,9 @@ class Task:
                         f"DEVICE={self.device}"
         
 
+        ###################################### 
         # Prepare the resources:
+        # TODO: this is messy, we should clean this up later
         resources = {'time': time, 'mem': mem}
 
         if depends_on:
@@ -77,14 +83,15 @@ class Task:
         if queue:
             resources['queue'] = queue
 
-        # Add other resources:
-        resources.update(other_resources)
+        # Note: We don't parse other_resouces in the same way - we just pass them through as-is,
+        # assuming the user has formatted them correctly.
+        #########################################################
 
         # Generate the command using queue_utils
         if scheduler == 'SLURM':
-            command = queue_utils.generate_slurm_command(resources, job_variables, scheduler_script)
+            command = queue_utils.generate_slurm_command(resources, other_resources, job_variables, scheduler_script)
         elif scheduler == 'SGE':
-            command = queue_utils.generate_sge_command(resources, job_variables, scheduler_script)
+            command = queue_utils.generate_sge_command(resources, other_resources, job_variables, scheduler_script)
         else:
             raise ValueError(f"Unsupported scheduler: {scheduler}")
 

@@ -1,7 +1,13 @@
-def generate_slurm_command(resources, job_variables, scheduler_script):
+def generate_slurm_command(resources, other_resources, job_variables, scheduler_script):
     scheduler_command = 'sbatch'
     # Map resources to SLURM options
     resources_string = parse_slurm_resources(resources)
+    # Add other resources as-is, from dict:
+    for key, value in other_resources.items():
+        if value is '': # If value is empty, assume it's a flag without a value
+            resources_string += f" {key}"
+        else:
+            resources_string += f" {key}={value}"
     # Construct the command
     command = f"{scheduler_command} --export={job_variables} {resources_string} {scheduler_script}"
     return command
@@ -38,10 +44,19 @@ def parse_slurm_output(output):
     job_id = int(output.split()[-1])
     return job_id
 
-def generate_sge_command(resources, job_variables, scheduler_script):
+def generate_sge_command(resources, other_resources, job_variables, scheduler_script):
     scheduler_command = 'qsub'
     # Map resources to SGE options
     resources_string = parse_sge_resources(resources)
+    # Add other resources as-is, from dict:
+    for key, value in other_resources.items():
+        if value is '': # If value is empty, assume it's a flag without a value
+            resources_string += f" {key}"
+        else:
+            if key.startswith('-l'):
+                resources_string += f" {key}={value}"
+            else:
+                resources_string += f" {key} {value}"
     # Construct the command
     command = f"{scheduler_command} -v {job_variables} {resources_string} {scheduler_script}"
     return command
