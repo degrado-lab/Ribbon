@@ -18,7 +18,7 @@ class Task:
         ''' Queue the LigandMPNN task using the given scheduler.
         Inputs:
             scheduler: str - the name of the scheduler to use. Options are 'SLURM' or 'SGE'.
-            depends_on: list - a jobID or list of jobIDs that this job depends on. (Each is an Int)
+            depends_on: list - a jobID or list of jobIDs that this job depends on. (Each is an int or str)
             dependency_type: str - the type of dependency. Options are 'afterok', 'afternotok', 'afterany', 'after', 'singleton'. Default is 'afterok'.
             job_name: str - the name of the job. Default is None.
             n_tasks: int - the number of tasks to run. Default is 1.
@@ -65,8 +65,7 @@ class Task:
         resources = {'time': time, 'mem': mem}
 
         if depends_on:
-            depends_on_str = ':'.join([str(job_id) for job_id in depends_on])
-            resources['dependency'] = f'{dependency_type}:{depends_on_str}'
+            resources['dependency'] = depends_on
 
         if gpus:
             resources['gpus'] = gpus
@@ -79,9 +78,12 @@ class Task:
 
         if output_file:
             resources['output'] = output_file
-
+        
         if queue:
             resources['queue'] = queue
+
+        if node_name:
+            resources['node-name'] = node_name
 
         # Note: We don't parse other_resouces in the same way - we just pass them through as-is,
         # assuming the user has formatted them correctly.

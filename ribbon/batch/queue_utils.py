@@ -12,7 +12,7 @@ def generate_slurm_command(resources, other_resources, job_variables, scheduler_
     command = f"{scheduler_command} --export={job_variables} {resources_string} {scheduler_script}"
     return command
 
-def parse_slurm_resources(resources):
+def parse_slurm_resources(resources, dependency_type='afterok'):
     resource_mappings = {
         'time': '--time',
         'mem': '--mem',
@@ -22,8 +22,16 @@ def parse_slurm_resources(resources):
         'requeue': '--requeue',
         'output': '--output',
         'queue': '--partition',
+        'node-name': '--nodelist',
         # Add other resource mappings as needed
     }
+
+    # Parse dependencies:
+    if 'dependency' in resources:
+        dependencies = resources['dependency']
+        if isinstance(dependencies, list):
+            dependencies = ':'.join([str(job_id) for job_id in dependencies])
+        resources['dependency'] = dependency_type + ':'+ dependencies
 
     resources_list = []
     for key, value in resources.items():
@@ -61,7 +69,7 @@ def generate_sge_command(resources, other_resources, job_variables, scheduler_sc
     command = f"{scheduler_command} -v {job_variables} {resources_string} {scheduler_script}"
     return command
 
-def parse_sge_resources(resources):
+def parse_sge_resources(resources, dependency_type=None):
     resource_mappings = {
         'time': '-l h_rt',
         'mem': '-l mem_free',
@@ -70,8 +78,16 @@ def parse_sge_resources(resources):
         'job-name': '-N',
         'output': '-o',
         'queue': '-q',
+        'node-name': '-l hostname',
         # Add other resource mappings as needed
     }
+
+    # Parse dependencies:
+    if 'dependency' in resources:
+        dependencies = resources['dependency']
+        if isinstance(dependencies, list):
+            dependencies = ','.join([str(job_id) for job_id in dependencies])
+        resources['dependency'] = dependencies
 
     resources_list = []
     for key, value in resources.items():
