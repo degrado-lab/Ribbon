@@ -2,9 +2,11 @@ import os
 import subprocess
 from pathlib import Path
 import pickle
+from ribbon.batch.queue_utils import sge_check_job_status
 from ribbon.config import DOWNLOAD_DIR, TASKS_DIR, TASK_CACHE_DIR
 import uuid
 import datetime
+import time
 
 #def directory_to_list(directory, extension):
 #    '''Returns a list of files in a directory with a given extension'''
@@ -119,3 +121,44 @@ def clean(all=False):
         file = Path(file)
         if all or (datetime.datetime.now() - datetime.datetime.fromtimestamp(file.stat().st_mtime)).days > 1:
             os.remove(file)
+
+def wait_for_jobs(job_ids, max_wait=3600):
+    '''Waits for a list of job IDs to complete. Returns when all jobs are completed.
+    - job_ids: list of job IDs
+    - max_wait: maximum time to wait in seconds. Default is 1 hour.'''
+    ### TODO: Add a required parameter for scheduler. For now, we assume SGE.
+    ### TODO: Add kill_after parameter to kill jobs if we exceed max_wait. Default false.
+    start_time = datetime.datetime.now()
+
+    # Print status:
+    waiting_for = len(job_ids)
+    print(f'Waiting for {waiting_for} jobs to complete...')
+
+    while True:
+
+        # Check if all jobs are completed:
+        all_completed = True
+        not_finished_count = 0
+        statuses = sge_check_job_status(job_ids)
+        for job_id, status in statuses.items():
+            if status == 'not completed':
+                all_completed = False
+                not_finished_count += 1
+        if all_completed:
+            break # All jobs are completed, we're done!
+
+        # Print status, only when it changes:
+        if not_finished_count != waiting_for:
+            waiting_for = not_finished_count
+            print(f'Waiting for {waiting_for} jobs to complete...')
+
+        # Check if we've waited too long:
+        elapsed_time = (datetime.datetime.now() - start_time).seconds
+        if elapsed_time > max_wait:
+            print('Max wait time exceeded. Exiting.')
+            break
+
+        # Wait for a bit before checking again:
+        time.sleep(10)
+
+    return

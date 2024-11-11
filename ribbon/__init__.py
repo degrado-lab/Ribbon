@@ -1,5 +1,5 @@
 # Import some utility functions to top level
-from .utils import clean, serialize, deserialize
+from .utils import clean, serialize, deserialize, wait_for_jobs
 
 # Import ribbon_tasks, if necessary:
 import os
