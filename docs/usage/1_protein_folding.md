@@ -1,7 +1,7 @@
 
 # A Simple Example: Protein Folding
 
-For this series of tutorials, all the code will be in the `examples` directory in the [repo](https://github.com/degrado-lab/Ribbon). After [installing](installation.md), Apptainer and ribbon, use the code in `/examples/example1` to follow along!
+For this series of tutorials, all the code will be in the `examples` directory in the [repo](https://github.com/degrado-lab/Ribbon). After [installing](installation.md), Apptainer and ribbon, use the code in [`/examples/example1`](https://github.com/degrado-lab/Ribbon/tree/main/examples/example1) to follow along!
 
 Let's say we want to fold a protein from an amino acid sequence. We'll use [Chai-1](https://github.com/chaidiscovery/chai-lab), a high-accuracy, ligand aware protein folding method. This requires a gpu!
 

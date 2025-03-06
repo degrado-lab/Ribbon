@@ -1,6 +1,6 @@
 # Queueing Pt. 3: Mixed Submission
 
-As seen in the previous tutorial, we can link together complex sets of jobs using the `depends_on` flag. In this way, we can submit many interdependent jobs ahead of time. (Code: `/examples/example4`) 
+As seen in the previous tutorial, we can link together complex sets of jobs using the `depends_on` flag. In this way, we can submit many interdependent jobs ahead of time. (Code: [`/examples/example5`](https://github.com/degrado-lab/Ribbon/tree/main/examples/example5)) 
 
 However, it's sometimes useful to run small snippets of python code between jobs, or to have programmatic checks to make sure everything's running smoothly (before we submit thousands of jobs that inevitably fail due to a typo). In these instances, we can use a _mixed submission_ strategy. Rather than submitting all of our `Tasks` to a scheduler at the start, we can queue a set of jobs, wait for them to finish, and check on or modify the results before submitting further jobs. 
 

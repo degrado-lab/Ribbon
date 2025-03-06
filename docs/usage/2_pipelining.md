@@ -1,7 +1,7 @@
 
 # Let's Get Pipelining
 
-Since running a job is so simple, we can string many jobs together into a __pipeline__. (Code: `/examples/example2`) 
+Since running a job is so simple, we can string many jobs together into a __pipeline__. (Code: [`/examples/example2`](https://github.com/degrado-lab/Ribbon/tree/main/examples/example2)) 
 
 For example, we'll start with an initial PDB structure. We'll redesign the sequence using LigandMPNN, which will output several FASTA files that it thinks could fold into our input structure:
 ```python

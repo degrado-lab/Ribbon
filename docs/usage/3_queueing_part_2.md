@@ -1,6 +1,6 @@
 # Queueing Pt. 2: Linking Jobs
 
-Often, we'll want to run `Tasks` one after the other, where each depends on the previous. Like in (Let's get Pipelining), this allows us to form complex protein design pipelines. In this example, we'll schedule a job to generate protein sequences using LigandMPNN, and schedule a subsequent job to fold the sequences using RaptorX-Single. (Code: `/examples/example4`) 
+Often, we'll want to run `Tasks` one after the other, where each depends on the previous. Like in (Let's get Pipelining), this allows us to form complex protein design pipelines. In this example, we'll schedule a job to generate protein sequences using LigandMPNN, and schedule a subsequent job to fold the sequences using RaptorX-Single. (Code: [`/examples/example4`](https://github.com/degrado-lab/Ribbon/tree/main/examples/example4)) 
 
 We'll start as before, defining a LigandMPNN `Task`:
 ```python

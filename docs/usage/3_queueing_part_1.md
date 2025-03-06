@@ -1,6 +1,6 @@
 # Queueing Pt. 1: Submitting Jobs
 
-If we want to run hundreds or thousands of `Tasks`, it's impractical to run them one-by-one. We can use a _scheduler_ like SLURM or SGE to queue `Tasks` (called jobs, in this context). A high-performance compute cluster will use one of these tools to manage jobs. (Code: `/examples/example3`) 
+If we want to run hundreds or thousands of `Tasks`, it's impractical to run them one-by-one. We can use a _scheduler_ like SLURM or SGE to queue `Tasks` (called jobs, in this context). A high-performance compute cluster will use one of these tools to manage jobs. (Code: [`/examples/example3`](https://github.com/degrado-lab/Ribbon/tree/main/examples/example3)) 
 
 In this tutorial, we will not cover how to use SGE or SLURM. We recommend becoming familiar with these tools on your compute cluster before continuing.
 
