@@ -2,8 +2,8 @@ from setuptools import setup, find_packages
 
 setup(
     name='ribbon',
-    version='0.2.0',
-    description='A tool for building and running enzyme design pipelines.',
+    version='0.2.1',
+    description='A python API for running enzyme design pipelines.',
     author='Nicholas Freitas',
     author_email='nicholas.freitas@ucsf.edu',
     packages=find_packages(include=['ribbon', 'ribbon.*', 'ribbon_tasks', 'ribbon_tasks.*']),
