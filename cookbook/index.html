@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Cookbook - Ribbon</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+        <link href="../css/custom.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Cookbook";
+        var mkdocs_page_input_path = "cookbook.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Ribbon
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Cookbook</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#chai-1">Chai-1</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#simple">Simple</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#advanced">Advanced</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ligandmpnn">LigandMPNN</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#simple_1">Simple</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#advanced_1">Advanced</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#raptorx-single">RaptorX-Single</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#simple_2">Simple</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#advanced_2">Advanced</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/getting_started/">How to use Ribbon</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/1_protein_folding/">A Simple Example: Protein Folding</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/2_pipelining/">Let's Get Pipelining</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/3_queueing_part_1/">Queueing Pt. 1: Submitting Jobs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/3_queueing_part_2/">Queueing Pt. 2: Linking Jobs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/3_queueing_part_3/">Queueing Pt. 3: Mixed Submission</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../api/ribbon_tasks/ribbon_tasks/">Ribbon Tasks</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../api/runner/">Core Ribbon Task</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../api/batch/batch/">Batch Processing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../api/config/">Config</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../api/deserialize_and_run/">Serialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../api/utils/">Utils</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Under the Hood</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/">Design Notes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contribute/">Contributing</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Ribbon</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Cookbook</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="cookbook">Cookbook</h1>
+<h2 id="chai-1">Chai-1</h2>
+<p>Chai-1 is a high accuracy, ligand-aware protein folding tool.
+It takes as input a FASTA file, and outputs a directory of folded PDB structures.
+Chai-1 scores are output as .npz files.</p>
+<h3 id="simple">Simple</h3>
+<p>Fold a protein from a sequence</p>
+<pre><code class="language-python">ribbon.Chai1(
+        fasta_file = 'my_sequence.fasta',   # A single input FASTA. If there are multiple sequences, they will be folded in the same structure.
+        output_dir = './out'                # Where the outputs will be stored
+    ).run()
+</code></pre>
+<h3 id="advanced">Advanced</h3>
+<p>Fold a protein from a sequence. Include two copies of ligand </p>
+<pre><code class="language-python">ribbon.Chai1(
+        fasta_file = 'my_sequence.fasta',   # A single input FASTA. If there are multiple sequences, they will be folded in the same structure.
+        output_dir = './out',               # Where the outputs will be stored
+        smiles_string = 'C1=CC=CC=C1',      # SMILES string of our ligand
+        num_ligands = 2,                    # How many copies of our ligand?
+        device = 'gpu'                      # Run on GPU (necessary for Chai-1)
+    ).run()
+</code></pre>
+<h2 id="ligandmpnn">LigandMPNN</h2>
+<p>LigandMPNN is a ligand-aware tool for designing sequences for a backbone structure.
+It takes as input a list of PDB files, and outputs a sequence (or sequences) that are predicted to fold into that structure.
+While LigandMPNN is gpu-accelerated, it seems to run fast on the CPU as well.</p>
+<h3 id="simple_1">Simple</h3>
+<p>Design a sequence for a backbone:</p>
+<pre><code class="language-python">ribbon.LigandMPNN(
+        structure_list = ['my_structure.pdb'],  # List of PDB files
+        output_dir = './out'                    # Output directory
+        num_designs = 5                         # How many sequences should we generate?
+    ).run()
+</code></pre>
+<p>The output folder will have the following structure:</p>
+<pre><code class="language-python">output_dir/
+├─ backbones/    # Backbone structures with labeled AAs (but no sidechains)
+├─ packed/       # (Optional) Backbone structures with packed sidechains
+├─ seqs/         # A single FASTA containing the reference sequence and all designed sequences
+└─ seqs_split/   # Individual FASTA files for each designed sequence
+</code></pre>
+<h3 id="advanced_1">Advanced</h3>
+<p>Design a homodimeric sequence, keeping crucial residues fixed.
+This example uses the <code>extra_args</code> parameter to add extra parameters into your run command.
+Note that this can inject arbitrary code into your container - use with caution!</p>
+<pre><code class="language-python">ligandmpnn_task = ribbon.LigandMPNN(
+        structure_list = ['my_structure.pdb'],  # List of PDB files
+        output_dir = './out'                    # Output directory
+        num_designs = 5                         # How many sequences should we generate?
+        extra_args= '--fixed_residues \&quot;' + RESIDUES_TO_KEEP + '\&quot; --homo_oligomer 1'   # Make sure to keep my catalytric residues, and make two chains identical.
+    )
+</code></pre>
+<h2 id="raptorx-single">RaptorX-Single</h2>
+<p>RaptorX-Single is a fast protein folding tool. It can fold small structures in as little as 5 seconds, after an initial loading period.
+It takes as input a FASTA file (or directory containing FASTAs), and outputs a directory of folded PDB structures.</p>
+<h3 id="simple_2">Simple</h3>
+<p>Fold a directory of FASTA files</p>
+<pre><code class="language-python">    ribbon.RaptorXSingle(
+            fasta_file_or_dir = './my_FASTA_directory/',
+            output_dir = './out'
+    ).run()
+</code></pre>
+<h3 id="advanced_2">Advanced</h3>
+<p>Fold a directory of FASTA files using a non-default model checkpoint (param). Run on the CPU (slower; GPU is default).</p>
+<pre><code class="language-python">    ribbon.RaptorXSingle(
+            fasta_file_or_dir = './my_FASTA_directory/',
+            output_dir = './out',
+            param = 'RaptorX-Single-ESM1b-ESM1v-ProtTrans-Ab.pt',
+            device='cpu'
+    ).run()
+</code></pre>
+<p>The available model parameters are:</p>
+<pre><code class="language-python">'RaptorX-Single-ESM1b.pt',
+'RaptorX-Single-ESM1v.pt',
+'RaptorX-Single-ProtTrans.pt',
+'RaptorX-Single-ESM1b-ESM1v-ProtTrans.pt',
+'RaptorX-Single-ESM1b-Ab.pt',
+'RaptorX-Single-ESM1v-Ab.pt',
+'RaptorX-Single-ProtTrans-Ab.pt',
+'RaptorX-Single-ESM1b-ESM1v-ProtTrans-Ab.pt'
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../installation/" class="btn btn-neutral float-left" title="Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../usage/getting_started/" class="btn btn-neutral float-right" title="How to use Ribbon">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../installation/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../usage/getting_started/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

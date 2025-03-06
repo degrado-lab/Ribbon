@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>A Simple Example: Protein Folding - Ribbon</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+        <link href="../../css/custom.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "A Simple Example: Protein Folding";
+        var mkdocs_page_input_path = "usage/1_protein_folding.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Ribbon
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../cookbook/">Cookbook</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/">How to use Ribbon</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">A Simple Example: Protein Folding</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../2_pipelining/">Let's Get Pipelining</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../3_queueing_part_1/">Queueing Pt. 1: Submitting Jobs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../3_queueing_part_2/">Queueing Pt. 2: Linking Jobs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../3_queueing_part_3/">Queueing Pt. 3: Mixed Submission</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/ribbon_tasks/ribbon_tasks/">Ribbon Tasks</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/runner/">Core Ribbon Task</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/batch/batch/">Batch Processing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/config/">Config</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/deserialize_and_run/">Serialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/utils/">Utils</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Under the Hood</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/">Design Notes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contribute/">Contributing</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Ribbon</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Usage</li>
+      <li class="breadcrumb-item active">A Simple Example: Protein Folding</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="a-simple-example-protein-folding">A Simple Example: Protein Folding</h1>
+<p>For this series of tutorials, all the code will be in the <code>examples</code> directory in the <a href="https://github.com/degrado-lab/Ribbon">repo</a>. After <a href="installation.md">installing</a>, Apptainer and ribbon, use the code in <code>/examples/example1</code> to follow along!</p>
+<p>Let's say we want to fold a protein from an amino acid sequence. We'll use <a href="https://github.com/chaidiscovery/chai-lab">Chai-1</a>, a high-accuracy, ligand aware protein folding method. This requires a gpu!</p>
+<p>First, we create a <code>Task</code> object, which sets up our Chai-1 job:</p>
+<pre><code class="language-python">import ribbon
+my_folding_task = ribbon.Chai1(
+        fasta_file = 'my_sequence.fasta',   # Input FASTA
+        output_dir = './out'                # Where the outputs will be stored
+)
+</code></pre>
+<p>Then, we run the <code>Task</code>:</p>
+<pre><code class="language-python">my_folding_task.run()
+</code></pre>
+<p>This can be shortened to a single command:</p>
+<pre><code class="language-python">import ribbon
+ribbon.Chai1(
+        fasta_file = 'my_sequence.fasta',   # Input FASTA
+        output_dir = './out'                # Where the outputs will be stored
+).run()
+</code></pre>
+<div class="admonition info">
+<p class="admonition-title">Why the long wait?</p>
+<p>When you run a <code>Task</code> for the first time, Ribbon will download all of the relevant software and scripts to your computer inside of a virtual machine. <strong>This only happens once</strong>!</p>
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../getting_started/" class="btn btn-neutral float-left" title="How to use Ribbon"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../2_pipelining/" class="btn btn-neutral float-right" title="Let's Get Pipelining">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../getting_started/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../2_pipelining/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

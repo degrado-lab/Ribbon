@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Utils - Ribbon</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+        <link href="../../css/custom.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Utils";
+        var mkdocs_page_input_path = "api/utils.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Ribbon
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../cookbook/">Cookbook</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage/getting_started/">How to use Ribbon</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage/1_protein_folding/">A Simple Example: Protein Folding</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage/2_pipelining/">Let's Get Pipelining</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage/3_queueing_part_1/">Queueing Pt. 1: Submitting Jobs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage/3_queueing_part_2/">Queueing Pt. 2: Linking Jobs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage/3_queueing_part_3/">Queueing Pt. 3: Mixed Submission</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../ribbon_tasks/ribbon_tasks/">Ribbon Tasks</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../runner/">Core Ribbon Task</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../batch/batch/">Batch Processing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Config</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../deserialize_and_run/">Serialization</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Utils</a>
+    <ul class="current">
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Under the Hood</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/">Design Notes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contribute/">Contributing</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Ribbon</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">API Reference</li>
+      <li class="breadcrumb-item active">Utils</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <div class="doc doc-object doc-module">
+
+
+
+<a id="ribbon.utils"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="ribbon.utils.clean_cache" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">clean_cache</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Cleans the cache directory. If all=True, deletes all files.
+Otherwise, deletes only files that are older than 1 day.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>ribbon/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clean_cache</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Cleans the cache directory. If all=True, deletes all files.</span>
+<span class="sd">    Otherwise, deletes only files that are older than 1 day.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">TASK_CACHE_DIR</span><span class="p">):</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span> <span class="ow">or</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">))</span><span class="o">.</span><span class="n">days</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="ribbon.utils.deserialize" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">deserialize</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Loads a Python object from a file.</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>filename</code></b>
+              –
+              <div class="doc-md-description">
+                <p>the filename to load the object from.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>cache_dir</code></b>
+              –
+              <div class="doc-md-description">
+                <p>the directory to load the object from. If None, uses TASK_CACHE_DIR from ribbon.config.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>object</code></b>              –
+              <div class="doc-md-description">
+                <p>the Python object loaded from the file.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+            <details class="quote">
+              <summary>Source code in <code>ribbon/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">deserialize</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads a Python object from a file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename: the filename to load the object from.</span>
+<span class="sd">        cache_dir: the directory to load the object from. If None, uses TASK_CACHE_DIR from ribbon.config.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        object: the Python object loaded from the file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Make sure we have the full path:</span>
+    <span class="k">if</span> <span class="n">cache_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">TASK_CACHE_DIR</span>
+    <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">make_directory</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">():</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">cache_dir</span> <span class="o">/</span> <span class="n">filename</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="ribbon.utils.download_container" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">download_container</span><span class="p">(</span><span class="n">container_local_path</span><span class="p">,</span> <span class="n">container_ORAS_URL</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Downloads a container to the download directory, DOWNLOAD_DIR, from ribbon.config.</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>container_local_path</code></b>
+                  (<code><span title="str">str</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>The path to the container to download.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>container_ORAS_URL</code></b>
+                  (<code><span title="str">str</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>The ORAS URL of the container to download.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              –
+              <div class="doc-md-description">
+                <p>None</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+            <details class="quote">
+              <summary>Source code in <code>ribbon/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">download_container</span><span class="p">(</span><span class="n">container_local_path</span><span class="p">,</span> <span class="n">container_ORAS_URL</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloads a container to the download directory, DOWNLOAD_DIR, from ribbon.config.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        container_local_path (str): The path to the container to download.</span>
+<span class="sd">        container_ORAS_URL (str): The ORAS URL of the container to download.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Make sure downloads directory exists:</span>
+    <span class="n">make_directories</span><span class="p">(</span><span class="n">DOWNLOAD_DIR</span><span class="p">)</span>
+
+    <span class="c1"># Download the container to the download_dir</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;apptainer pull </span><span class="si">{</span><span class="n">container_local_path</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">container_ORAS_URL</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">run_command</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="c1"># Get error codes, etc.</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="ribbon.utils.list_files" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">list_files</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">extension</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Returns a list of files in a directory with a given extension</p>
+
+            <details class="quote">
+              <summary>Source code in <code>ribbon/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">list_files</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">extension</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a list of files in a directory with a given extension&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">extension</span><span class="p">)]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="ribbon.utils.make_directories" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">make_directories</span><span class="p">(</span><span class="o">*</span><span class="n">directories</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Creates directories if they do not exist. 
+Returns a list of Path objects, in case they were strings.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>ribbon/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">make_directories</span><span class="p">(</span><span class="o">*</span><span class="n">directories</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates directories if they do not exist. </span>
+<span class="sd">    Returns a list of Path objects, in case they were strings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_directories</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="n">directories</span><span class="p">:</span>
+        <span class="c1"># Check it&#39;s a Path object:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+        <span class="n">directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">new_directories</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_directories</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="ribbon.utils.make_directory" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">make_directory</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Creates a directory if it does not exist. </p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>directory</code></b>
+                  (<code><span title="str">str</span> or <span title="pathlib.Path">Path</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>The directory to create.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>Path</code></b>              –
+              <div class="doc-md-description">
+                <p>path object of the created directory.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+            <details class="quote">
+              <summary>Source code in <code>ribbon/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">make_directory</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a directory if it does not exist. </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        directory (str or Path): The directory to create.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Path: path object of the created directory.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="n">make_directories</span><span class="p">(</span><span class="n">directory</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">directory</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="ribbon.utils.run_command" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Runs a command in the shell.
+If capture_output=True, returns the stdout and stderr.
+Otherwise, returns prints the stdout and stderr.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>ribbon/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Runs a command in the shell.</span>
+<span class="sd">    If capture_output=True, returns the stdout and stderr.</span>
+<span class="sd">    Otherwise, returns prints the stdout and stderr.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Run the container</span>
+    <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running command:&#39;</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">capture_output</span><span class="p">:</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+        <span class="c1"># return stdout and stderr</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="ribbon.utils.serialize" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">serialize</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Saves a Python object to a file. A random filename is generated, and it is saved to the save_dir.</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>obj</code></b>
+              –
+              <div class="doc-md-description">
+                <p>the Python object to save.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>save_dir</code></b>
+              –
+              <div class="doc-md-description">
+                <p>the directory to save the object. If None, uses TASK_CACHE_DIR from ribbon.config.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>Path</code></b>              –
+              <div class="doc-md-description">
+                <p>path object of the saved file.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+            <details class="quote">
+              <summary>Source code in <code>ribbon/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves a Python object to a file. A random filename is generated, and it is saved to the save_dir.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        obj: the Python object to save.</span>
+<span class="sd">        save_dir: the directory to save the object. If None, uses TASK_CACHE_DIR from ribbon.config.</span>
+
+<span class="sd">    Returns: </span>
+<span class="sd">        Path: path object of the saved file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">save_dir</span> <span class="o">=</span> <span class="n">TASK_CACHE_DIR</span>
+    <span class="c1"># Make sure the directory exists:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
+    <span class="n">save_dir</span> <span class="o">=</span> <span class="n">make_directory</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving object to:&#39;</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
+
+    <span class="c1"># Generate a random filename:</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">save_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="si">}</span><span class="s1">.pkl&#39;</span>
+
+    <span class="c1"># Save the object:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filename</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="ribbon.utils.verify_container" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">verify_container</span><span class="p">(</span><span class="n">software_name</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Verifies that the container for the given software is downloaded. If not, downloads it to DOWNLOAD_DIR from ribbon.config.</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>software_name</code></b>
+                  (<code><span title="str">str</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>The name of the software to verify the container for.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>str</code></b>              –
+              <div class="doc-md-description">
+                <p>The path to the downloaded container.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+            <details class="quote">
+              <summary>Source code in <code>ribbon/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">verify_container</span><span class="p">(</span><span class="n">software_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Verifies that the container for the given software is downloaded. If not, downloads it to DOWNLOAD_DIR from ribbon.config.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        software_name (str): The name of the software to verify the container for.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The path to the downloaded container.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+   <span class="c1"># Get the container local path and ORAS URL:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;TASKS_DIR:&#39;</span><span class="p">,</span> <span class="n">TASKS_DIR</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="n">TASKS_DIR</span> <span class="o">/</span> <span class="s1">&#39;containers.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">containers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="c1"># Our database maps software names to container names and ORAS URLs</span>
+    <span class="c1"># Example:  {&quot;LigandMPNN&quot;: [&quot;ligandMPNN.sif&quot;, &quot;oras://docker.io/nicholasfreitas/ligandmpnn:latest&quot;]}</span>
+    <span class="n">container_local_name</span><span class="p">,</span> <span class="n">container_ORAS_URL</span> <span class="o">=</span> <span class="n">containers</span><span class="p">[</span><span class="n">software_name</span><span class="p">]</span>
+    <span class="n">container_local_path</span> <span class="o">=</span> <span class="n">DOWNLOAD_DIR</span> <span class="o">/</span> <span class="n">container_local_name</span>
+
+    <span class="c1"># Is the container already downloaded?</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">container_local_path</span><span class="p">):</span>
+        <span class="c1"># If not, download the container</span>
+        <span class="n">download_container</span><span class="p">(</span><span class="n">container_local_path</span><span class="p">,</span> <span class="n">container_ORAS_URL</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">container_local_path</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="ribbon.utils.wait_for_jobs" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">wait_for_jobs</span><span class="p">(</span><span class="n">job_ids</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">max_wait</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Waits for a list of job IDs to complete. Returns when all jobs are completed, or when max_wait is exceeded.</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>job_ids</code></b>
+                  (<code><span title="list">list</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>list of job IDs</p>
+              </div>
+            </li>
+            <li>
+              <b><code>scheduler</code></b>
+                  (<code><span title="str">str</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>the scheduler to use. SGE or SLURM.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>max_wait</code></b>
+                  (<code><span title="int">int</span></code>, default:
+                      <code>3600</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>maximum time to wait in seconds. Default is 1 hour.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              –
+              <div class="doc-md-description">
+                <p>None</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>        <p>TODO: Add kill_after parameter to kill jobs if we exceed max_wait. Default false.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>ribbon/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">wait_for_jobs</span><span class="p">(</span><span class="n">job_ids</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">max_wait</span><span class="o">=</span><span class="mi">3600</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Waits for a list of job IDs to complete. Returns when all jobs are completed, or when max_wait is exceeded.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        job_ids (list): list of job IDs</span>
+<span class="sd">        scheduler (str): the scheduler to use. SGE or SLURM.</span>
+<span class="sd">        max_wait (int): maximum time to wait in seconds. Default is 1 hour.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+
+<span class="sd">    TODO: Add kill_after parameter to kill jobs if we exceed max_wait. Default false.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">scheduler</span> <span class="o">==</span> <span class="s1">&#39;SGE&#39;</span><span class="p">:</span>
+        <span class="n">check_job_status</span> <span class="o">=</span> <span class="n">sge_check_job_status</span>
+    <span class="k">elif</span> <span class="n">scheduler</span> <span class="o">==</span> <span class="s1">&#39;SLURM&#39;</span><span class="p">:</span>
+        <span class="n">check_job_status</span> <span class="o">=</span> <span class="n">slurm_check_job_status</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid scheduler. Must be SGE or SLURM.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Print status:</span>
+    <span class="n">waiting_for</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">job_ids</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Waiting for </span><span class="si">{</span><span class="n">waiting_for</span><span class="si">}</span><span class="s1"> jobs to complete...&#39;</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+
+        <span class="c1"># Check if all jobs are completed:</span>
+        <span class="n">all_completed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">not_finished_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">statuses</span> <span class="o">=</span> <span class="n">check_job_status</span><span class="p">(</span><span class="n">job_ids</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">job_id</span><span class="p">,</span> <span class="n">status</span> <span class="ow">in</span> <span class="n">statuses</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;not completed&#39;</span><span class="p">:</span>
+                <span class="n">all_completed</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">not_finished_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">all_completed</span><span class="p">:</span>
+            <span class="k">break</span> <span class="c1"># All jobs are completed, we&#39;re done!</span>
+
+        <span class="c1"># Print status, only when it changes:</span>
+        <span class="k">if</span> <span class="n">not_finished_count</span> <span class="o">!=</span> <span class="n">waiting_for</span><span class="p">:</span>
+            <span class="n">waiting_for</span> <span class="o">=</span> <span class="n">not_finished_count</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Waiting for </span><span class="si">{</span><span class="n">waiting_for</span><span class="si">}</span><span class="s1"> jobs to complete...&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check if we&#39;ve waited too long:</span>
+        <span class="n">elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span><span class="o">.</span><span class="n">seconds</span>
+        <span class="k">if</span> <span class="n">elapsed_time</span> <span class="o">&gt;</span> <span class="n">max_wait</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max wait time exceeded. Exiting.&#39;</span><span class="p">)</span>
+            <span class="k">break</span>
+
+        <span class="c1"># Wait for a bit before checking again:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="k">return</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../deserialize_and_run/" class="btn btn-neutral float-left" title="Serialization"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../design/" class="btn btn-neutral float-right" title="Design Notes">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../deserialize_and_run/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../design/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
