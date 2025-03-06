@@ -117,7 +117,7 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="lets-get-pipelining">Let's Get Pipelining</h1>
-<p>Since running a job is so simple, we can string many jobs together into a <strong>pipeline</strong>. (Code: <code>/examples/example2</code>) </p>
+<p>Since running a job is so simple, we can string many jobs together into a <strong>pipeline</strong>. (Code: <a href="https://github.com/degrado-lab/Ribbon/tree/main/examples/example2"><code>/examples/example2</code></a>) </p>
 <p>For example, we'll start with an initial PDB structure. We'll redesign the sequence using LigandMPNN, which will output several FASTA files that it thinks could fold into our input structure:</p>
 <pre><code class="language-python">ribbon.LigandMPNN(
     structure_list = ['my_structure.pdb'],

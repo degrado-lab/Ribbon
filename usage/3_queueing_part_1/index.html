@@ -117,7 +117,7 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="queueing-pt-1-submitting-jobs">Queueing Pt. 1: Submitting Jobs</h1>
-<p>If we want to run hundreds or thousands of <code>Tasks</code>, it's impractical to run them one-by-one. We can use a <em>scheduler</em> like SLURM or SGE to queue <code>Tasks</code> (called jobs, in this context). A high-performance compute cluster will use one of these tools to manage jobs. (Code: <code>/examples/example3</code>) </p>
+<p>If we want to run hundreds or thousands of <code>Tasks</code>, it's impractical to run them one-by-one. We can use a <em>scheduler</em> like SLURM or SGE to queue <code>Tasks</code> (called jobs, in this context). A high-performance compute cluster will use one of these tools to manage jobs. (Code: <a href="https://github.com/degrado-lab/Ribbon/tree/main/examples/example3"><code>/examples/example3</code></a>) </p>
 <p>In this tutorial, we will not cover how to use SGE or SLURM. We recommend becoming familiar with these tools on your compute cluster before continuing.</p>
 <p>To start, let's make a new <code>Task</code> object to fold a protein with Chai-1:</p>
 <pre><code class="language-python">import ribbon

@@ -117,7 +117,7 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="queueing-pt-3-mixed-submission">Queueing Pt. 3: Mixed Submission</h1>
-<p>As seen in the previous tutorial, we can link together complex sets of jobs using the <code>depends_on</code> flag. In this way, we can submit many interdependent jobs ahead of time. (Code: <code>/examples/example4</code>) </p>
+<p>As seen in the previous tutorial, we can link together complex sets of jobs using the <code>depends_on</code> flag. In this way, we can submit many interdependent jobs ahead of time. (Code: <a href="https://github.com/degrado-lab/Ribbon/tree/main/examples/example5"><code>/examples/example5</code></a>) </p>
 <p>However, it's sometimes useful to run small snippets of python code between jobs, or to have programmatic checks to make sure everything's running smoothly (before we submit thousands of jobs that inevitably fail due to a typo). In these instances, we can use a <em>mixed submission</em> strategy. Rather than submitting all of our <code>Tasks</code> to a scheduler at the start, we can queue a set of jobs, wait for them to finish, and check on or modify the results before submitting further jobs. </p>
 <p>In this example, we'll predict sequences using LigandMPNN, but before we fold them with RaptorX-Single, we'll apply mutations to those sequences using a simple python function.</p>
 <p>We start by queueing our first job:</p>
