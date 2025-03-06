@@ -5,6 +5,18 @@ import subprocess
 #################################################################
 
 def generate_slurm_command(resources, other_resources, job_variables, scheduler_script):
+    """
+    Generate a SLURM command to submit a job to the scheduler.
+
+    Args:
+        resources (dict): A dictionary of resources to request for the job.
+        other_resources (dict): A dictionary of other resources to pass to the scheduler.
+        job_variables (str): A string of environment variables to pass to the job.
+        scheduler_script (str): The path to the script to run.
+
+    Returns:
+        str: The SLURM command to submit
+    """
     scheduler_command = 'sbatch'
     # Map resources to SLURM options
     resources_string = parse_slurm_resources(resources)
@@ -19,6 +31,16 @@ def generate_slurm_command(resources, other_resources, job_variables, scheduler_
     return command
 
 def parse_slurm_resources(resources, dependency_type='afterok'):
+    """
+    Parse a dictionary of resources into a string of SLURM options.
+
+    Args:
+        resources (dict): A dictionary of resources to request for the job.
+        dependency_type (str): The type of dependency to use (e.g. 'afterok', 'afterany', 'afternotok')
+
+    Returns:
+        str: A string of SLURM options
+    """
     resource_mappings = {
         'time': '--time',
         'mem': '--mem',
@@ -62,6 +84,19 @@ def parse_slurm_output(output):
 ########### SGE (Sun Grid Engine) Scheduler Functions ###########
 #################################################################
 def generate_sge_command(resources, other_resources, job_variables, scheduler_script):
+    """
+    Generate an SGE command to submit a job to the scheduler.
+
+    Args:
+        resources (dict): A dictionary of resources to request for the job.
+        other_resources (dict): A dictionary of other resources to pass to the scheduler.
+        job_variables (str): A string of environment variables to pass to the job.
+        scheduler_script (str): The path to the script to run.
+
+    Returns:
+        str: The SGE command to submit
+    """
+
     scheduler_command = 'qsub'
     # Map resources to SGE options
     resources_string = parse_sge_resources(resources)
@@ -79,6 +114,17 @@ def generate_sge_command(resources, other_resources, job_variables, scheduler_sc
     return command
 
 def parse_sge_resources(resources, dependency_type=None):
+    """
+    Parse a dictionary of resources into a string of SGE options.
+
+    Args:
+        resources (dict): A dictionary of resources to request for the job.
+
+    Returns:
+        str: A string of SGE options
+
+    TODO: implement dependency handling
+    """
     resource_mappings = {
         'time': '-l h_rt',
         'mem': '-l mem_free',
@@ -129,10 +175,10 @@ def sge_check_job_status(job_ids):
     Check if SGE jobs are still running or have completed.
 
     Parameters:
-    - job_ids: List of job IDs (as integers or strings)
+        job_ids (list): A list of job IDs (as integers or strings)
 
     Returns:
-    - A dictionary with job IDs as keys and statuses as values ('running' or 'completed')
+        dict: A dictionary with job IDs as keys and statuses as values ('running' or 'completed')
     """
     status_dict = {}
     for jobid in job_ids:
@@ -152,9 +198,32 @@ def sge_check_job_status(job_ids):
             status_dict[jobid] = f'Error: {e}'
     return status_dict
 
-# Example usage:
-# if __name__ == "__main__":
-#     job_ids = [12345, 12346, 12347]  # Replace with your actual job IDs
-#     statuses = check_job_status(job_ids)
-#     for jobid, status in statuses.items():
-#         print(f"Job {jobid}: {status}")
+def slurm_check_job_status(job_ids):
+    """
+    Check if SLURM jobs are still running or have completed.
+
+    Parameters:
+        job_ids (list): A list of job IDs (as integers or strings)
+
+    Returns:
+        dict: A dictionary with job IDs as keys and statuses as values ('running' or 'completed')
+    """
+    status_dict = {}
+    for jobid in job_ids:
+        try:
+            # Run 'squeue -j <jobid> --noheader' and capture the output.
+            result = subprocess.run(
+                ['squeue', '-j', str(jobid), '--noheader'],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                text=True
+            )
+            # If any output is returned, the job is still in the queue (running or pending)
+            if result.stdout.strip():
+                status = 'not completed'
+            else:
+                status = 'completed'
+            status_dict[jobid] = status
+        except Exception as e:
+            status_dict[jobid] = f'Error: {e}'
+    return status_dict

@@ -7,32 +7,49 @@ import os
 
 class Task:
     def __init__(self, device='cpu', extra_args=""):
+        """
+        The Task class is the parent class for all tasks in the Ribbon framework.
+        It contains the basic functionality for running tasks, queuing tasks, and managing task dependencies.
+        
+        Args:
+            device (str): Enables Apptainer to use GPU. Options are 'gpu', 'gpu_wsl' (if using WSL), or 'cpu'. Default is 'gpu'.
+            extra_args (str, optional): Additional arguments to pass to the task
+
+        Returns:
+            None
+        """
         self.device = device
         self.extra_args = extra_args
         self.task_name = None
 
     def run(self):
+        """
+        Run the task. This method should be overridden by the child class.
+        """
         raise NotImplementedError(f"You are attempting to run a task { self.__class__.__name__ } without defining a run method.")
     
     def queue(self, scheduler, depends_on=[], dependency_type='afterok', n_tasks=1, time='1:00:00', mem='2G', auto_restart=True, other_resources={}, job_name=None, output_file=None, queue=None,  gpus=None, node_name=None):
-        ''' Queue the LigandMPNN task using the given scheduler.
-        Inputs:
-            scheduler: str - the name of the scheduler to use. Options are 'SLURM' or 'SGE'.
-            depends_on: list - a jobID or list of jobIDs that this job depends on. (Each is an int or str)
-            dependency_type: str - the type of dependency. Options are 'afterok', 'afternotok', 'afterany', 'after', 'singleton'. Default is 'afterok'.
-            job_name: str - the name of the job. Default is None.
-            n_tasks: int - the number of tasks to run. Default is 1.
-            time: str - the time to allocate for the task. Default is '1:00:00'.
-            mem: str - the memory to allocate for the task. Default is '2G'.
-            gpus: int - the number of GPUs to allocate for the task. Default is None.
-            auto_restart: bool - whether to automatically restart the task if it fails. Default is True.
-            output_file: str - the file to write the output to. Default is None.
-            queue: str - the queue to submit the task to. Default is None.
-            node_name: str - the name of the node to run the task on. Default is None.
-            other_resources: dict - other resources to allocate for the task. Has the form {"--option": "value"}. Default is empty dict.
-        Outputs:
-            job_id: str - the ID of the job in the scheduler.
-        '''
+        """
+        Queue the LigandMPNN task using the given scheduler.
+
+        Args:
+            scheduler (str): The name of the scheduler to use. Options are 'SLURM' or 'SGE'.
+            depends_on (list, optional): A jobID or list of jobIDs that this job depends on. (Each is an int or str). Defaults to [].
+            dependency_type (str, optional): The type of dependency. Options are 'afterok', 'afternotok', 'afterany', 'after', 'singleton'. Defaults to 'afterok'.
+            n_tasks (int, optional): The number of tasks to run. Defaults to 1.
+            time (str, optional): The time to allocate for the task. Defaults to '1:00:00'.
+            mem (str, optional): The memory to allocate for the task. Defaults to '2G'.
+            auto_restart (bool, optional): Whether to automatically restart the task if it fails. Defaults to True.
+            other_resources (dict, optional): Other resources to allocate for the task. Has the form {"--option": "value"}. Defaults to {}.
+            job_name (str, optional): The name of the job. Defaults to None.
+            output_file (str, optional): The file to write the output to. Defaults to None.
+            queue (str, optional): The queue to submit the task to. Defaults to None.
+            gpus (int, optional): The number of GPUs to allocate for the task. Defaults to None.
+            node_name (str, optional): The name of the node to run the task on. Defaults to None.
+            
+        Returns:
+            str: The ID of the job in the scheduler.
+        """
         # Serialize the task object to a pickle file:
         serialized_task = utils.serialize(self)
 
@@ -112,16 +129,21 @@ class Task:
 
         return job_id
     
-    def _run_task(self, task_name, scheduler='local', device='gpu', extra_args="", **kwargs ):
-        ''' Run a task with the given name and arguments.
-        Inputs:
-            task_name: str - the name of the task to run
-            device: str - Enables Apptainer to use GPU. Options are 'gpu', 'gpu_wsl' (if using WSL), or 'cpu'. Default is 'gpu'.
-            extra_args: str - additional arguments to pass to the task, which is optional. E.g. '--save_frequency 10 --num_steps 1000'
-            kwargs: dict - the arguments to pass to the task. These are task-specific.
-        Outputs:
+    def _run_task(self, task_name, scheduler='local', device='gpu', extra_args="", container_override=None, **kwargs ):
+        """
+        Run a task with the given name and arguments.
+        In the child Task class, this method should be called from within the user-facing run() method.
+
+        Args:
+            task_name (str): The name of the task to run.
+            device (str): Enables Apptainer to use GPU. Options are 'gpu', 'gpu_wsl' (if using WSL), or 'cpu'. Default is 'gpu'.
+            extra_args (str, optional): Additional arguments to pass to the task, e.g. '--save_frequency 10 --num_steps 1000'.
+            container_override (str, optional): The name of the container to use for the task. If not provided, the default container for that Task will be used.
+            kwargs (dict): Task-specific keyword arguments.
+
+        Returns:
             None
-        '''
+        """
         # Add extra_args to kwargs:
         kwargs['extra_args'] = extra_args
 
@@ -137,6 +159,10 @@ class Task:
         task_dict = self._get_task_dict(task_name)
         task_name = task_dict['name']
         container_name = task_dict['container']
+        
+        # Allow user to override the default container (used for the Custom task):
+        if container_override is not None:
+            container_name = container_override
         print('--------------------------------------------')
         print('- Task name:', task_name)
         print('- Task description:', task_dict['description'])
@@ -169,7 +195,9 @@ class Task:
         print('--------------------------------------------')
     
     def _get_task_dict(self, task_name):
-        '''Returns the dictionary for a given task'''
+        """
+        Returns the dictionary for a given task.
+        """
         # Which inputs does our task require?
         with open(TASKS_DIR / 'tasks.json') as f:
             tasks = json.load(f)
@@ -177,7 +205,7 @@ class Task:
         return tasks[task_name]
 
     def _get_task_inputs(self, task_name):
-        '''Returns the inputs required for a given task'''
+        """Returns the inputs required for a given task"""
         #Get the command:
         command = self._get_task_dict(task_name)['command']
 
@@ -190,5 +218,8 @@ class Task:
         return inputs
     
     def __repr__(self):
+        """
+        Returns a string representation of the Task object.
+        """
         return f"{self.__class__.__name__} \
             {self.__dict__}"

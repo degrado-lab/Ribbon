@@ -1,0 +1,48 @@
+site_name: Ribbon
+theme:
+  name: readthedocs
+  features:
+    - navigation.tabs
+    - navigation.top
+    - search.highlight
+    - content.code.annotate
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: true
+            show_if_no_docstring: false
+            docstring_style: google
+            allow_inspection: true
+
+extra_css: 
+- css/custom.css
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Cookbook: cookbook.md
+  - Usage:
+    - usage/getting_started.md
+    - usage/1_protein_folding.md
+    - usage/2_pipelining.md
+    - usage/3_queueing_part_1.md
+    - usage/3_queueing_part_2.md
+    - usage/3_queueing_part_3.md
+  - API Reference:
+      - Ribbon Tasks: api/ribbon_tasks/ribbon_tasks.md
+      - Core Ribbon Task: api/runner.md
+      - Batch Processing: api/batch/batch.md
+      - Config: api/config.md
+      - Serialization: api/deserialize_and_run.md
+      - Utils: api/utils.md
+  - Under the Hood:
+    - Design Notes: design.md
+    - Contributing: contribute.md
+
+
+markdown_extensions:
+  - admonition
+
