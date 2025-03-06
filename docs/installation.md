@@ -1,3 +1,5 @@
+# Installation
+
 Apptainer is the only requirement to run Ribbon. Install apptainer for your system [here](https://apptainer.org/docs/admin/main/installation.html#install-ubuntu-packages).
 
 We recommend creating a fresh environment for Ribbon:

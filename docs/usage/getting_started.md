@@ -2,7 +2,7 @@
 
 Ribbon is an easy-to-use python package, which simplifies the installation and running of protein design software.
 
-Want to fold a protein? Once Ribbon is [installed](installation.md), it's as easy as:
+Want to fold a protein? Once Ribbon is [installed](https://degrado-lab.github.io/Ribbon/installation/), it's as easy as:
 ```python
 import ribbon
 ribbon.Chai1(
@@ -11,4 +11,4 @@ ribbon.Chai1(
 ).run()
 ```
 
-To get started, move on to our initial tutorial: [A Simple Example: Protein Folding](1_protein_folding)
+To get started, move on to our initial tutorial: [A Simple Example: Protein Folding](https://degrado-lab.github.io/Ribbon/usage/1_protein_folding/)
