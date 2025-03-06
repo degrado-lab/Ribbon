@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='ribbon',
+    name='ribbon-toolkit',
     version='0.2.1',
     description='A python API for running enzyme design pipelines.',
     author='Nicholas Freitas',
