@@ -1,1 +1,2 @@
 global-include *.py *.sh *.json *.txt
+recursive-include ribbon/ribbon_tasks *

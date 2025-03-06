@@ -7,9 +7,9 @@ setup(
     author='Nicholas Freitas',
     author_email='nicholas.freitas@ucsf.edu',
     packages=find_packages(include=['ribbon', 'ribbon.*', 'ribbon_tasks', 'ribbon_tasks.*']),
+    include_package_data=True,
     install_requires=[],
     classifiers=[
-        # See https://pypi.org/classifiers/ for the full list
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
