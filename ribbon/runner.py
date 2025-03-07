@@ -1,7 +1,7 @@
 import ribbon.utils as utils
 import ribbon.batch.queue_utils as queue_utils
 from pathlib import Path
-from ribbon.config import TASKS_DIR, MODULE_DIR
+from ribbon.config import TASKS_DIR
 import json
 import os
 
@@ -63,6 +63,7 @@ class Task:
         utils.verify_container(job_container_name)
 
         # Correct the scheduler script mapping:
+        MODULE_DIR = Path(__file__).resolve().parent
         batch_script_dir = Path(MODULE_DIR) / 'batch' / 'batch_scripts'
         scheduler_script = {'SLURM': str(batch_script_dir / 'slurm_submit.sh'), 
                             'SGE':   str(batch_script_dir / 'sge_submit.sh')}[scheduler]
