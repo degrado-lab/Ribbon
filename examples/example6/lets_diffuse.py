@@ -3,7 +3,9 @@
 import ribbon
 ribbon.RFDiffusionAA(
         input_structure = "my_structure.pdb",
-        output_dir = "./out",
-        contig_map = "[150-150]",
+        output_dir = "./out4",
+        contig_map = "[\\'A1-103,30-50,A109-125\\']",
+        ligand = "LIG",
+        diffuser_steps = 100,
+        design_startnum = 5,
 ).run()
-

@@ -4,6 +4,7 @@ from pathlib import Path
 from ribbon.config import TASKS_DIR
 import json
 import os
+import re
 
 class Task:
     def __init__(self, device='cpu', extra_args=""):
@@ -171,11 +172,11 @@ class Task:
         # Verify we have the container associated with the software we want to run. 
         # If not, attempt to download it to the download_dir
         container_path = utils.verify_container(container_name)
-
+        
         # Add inputs to the command, by replacing the placeholders in the command string:
         command = task_dict['command']
         for input in required_inputs:
-            command = command.replace(f'{{{input}}}', str(kwargs[input]))
+            command = command.replace(f'{{{input}}}', str(kwargs[input])) #We need three sets of braces. Two sets are needed to escape them, and the third set is the actual placeholder.
         
         print('- Command:', command)
 
@@ -207,13 +208,14 @@ class Task:
 
     def _get_task_inputs(self, task_name):
         """Returns the inputs required for a given task"""
-        #Get the command:
+        # Get the command:
         command = self._get_task_dict(task_name)['command']
 
-        #Inputs are surrounded by curly braces. Here we extract them.
-        inputs = [i[1:-1] for i in command.split() if i.startswith('{') and i.endswith('}')]
+        # Use regex to find all occurrences of text inside curly braces.
+        # The pattern '\{([^{}]+)\}' matches a '{', then captures any characters except '{' or '}', then a '}'.
+        inputs = re.findall(r'\{([^{}]+)\}', command)
 
-        #Remove duplicates:
+        # Remove duplicates:
         inputs = list(set(inputs))
         
         return inputs

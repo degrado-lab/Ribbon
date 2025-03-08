@@ -33,11 +33,7 @@ RIBBON_TASKS_REPO_NAME = "Ribbon-Tasks"
 
 def get_data_directory():
     """Return the directory where data files should reside."""
-    env_var = os.environ[RIBBON_TASKS_ENV_VAR]
-    if env_var:
-        return env_var
-    else:
-        return str(DEFAULT_TASKS_DIR)
+    return os.environ.get(RIBBON_TASKS_ENV_VAR, str(DEFAULT_TASKS_DIR))
 
 # Setting the variables from above:
 os.environ[RIBBON_TASKS_ENV_VAR] = get_data_directory()
