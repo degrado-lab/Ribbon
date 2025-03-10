@@ -1,6 +1,6 @@
 # Import some utility functions to top level
 from .utils import clean_cache, serialize, deserialize, wait_for_jobs
-from .config import RIBBON_TASKS_ENV_VAR, GITHUB_ZIP_URL, TASKS_MODULE_DIR
+from .config import RIBBON_TASKS_ENV_VAR, GITHUB_ZIP_URL, TASKS_MODULE_DIR, DEFAULT_TASKS_DIR
 from pathlib import Path
 import os
 import sys
@@ -45,7 +45,12 @@ if not os.path.exists(custom_tasks_path):
     os.makedirs(custom_tasks_path.parent, exist_ok=True)
 
 if not data_already_downloaded(custom_tasks_path.parent, custom_tasks_path.name):
-    download_and_extract_data(custom_tasks_path.parent, custom_tasks_path.name)
+    # Are we using the default?
+    if custom_tasks_path == DEFAULT_TASKS_DIR:
+        download_and_extract_data(custom_tasks_path.parent, custom_tasks_path.name)
+    # Otherwise, the user has asked to use a custom directory, but it doesn't exist.
+    else:
+        raise FileNotFoundError(f"Asked to use custom tasks directory '{custom_tasks_path}', but it doesn't exist.")
 else:
     print("Data files already present in:", custom_tasks_path)
 

@@ -56,7 +56,6 @@ def verify_container(software_name):
     """
    # Get the container local path and ORAS URL:
     import json
-    print('TASKS_MODULE_DIR:', TASKS_MODULE_DIR)
     with open( TASKS_MODULE_DIR / 'containers.json') as f:
         containers = json.load(f)
 
@@ -122,7 +121,6 @@ def serialize(obj, save_dir=None):
     if save_dir is None:
         save_dir = TASK_CACHE_DIR
     # Make sure the directory exists:
-    print(save_dir)
     save_dir = make_directory(save_dir)
 
     print('Saving object to:', save_dir)
