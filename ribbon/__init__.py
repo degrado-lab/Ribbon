@@ -1,6 +1,7 @@
 # Import some utility functions to top level
 from .utils import clean_cache, serialize, deserialize, wait_for_jobs
-from .config import RIBBON_TASKS_ENV_VAR, RIBBON_TASKS_REPO_NAME, GITHUB_ZIP_URL, TASKS_DIR
+from .config import RIBBON_TASKS_ENV_VAR, GITHUB_ZIP_URL, TASKS_MODULE_DIR
+from pathlib import Path
 import os
 import sys
 
@@ -26,40 +27,32 @@ def download_and_extract_data(data_dir, repo_name):
     except Exception as e:
         raise RuntimeError("Failed to download data: " + str(e))
     
-    temp_extract_dir = os.path.join(data_dir, "temp_extract")
     try:
         with zipfile.ZipFile(io.BytesIO(zip_data)) as z:
-            z.extractall(temp_extract_dir)
+            z.extractall(data_dir)
     except Exception as e:
         raise RuntimeError("Failed to extract data: " + str(e))
     
-    # Rename the extracted directory to the desired repo_name
-    extracted_dir = os.path.join(temp_extract_dir, "Ribbon-Tasks-main")
     final_dir = os.path.join(data_dir, repo_name)
-    if os.path.exists(final_dir):
-        shutil.rmtree(final_dir)
-    shutil.move(extracted_dir, final_dir)
-    shutil.rmtree(temp_extract_dir)
     
     print("Ribbon Task files downloaded and extracted to:", final_dir)
 
 ### Ensure that the required data files are available.
 # The environment variable will be set automatically by config.py if it's not already set by the user.
-custom_tasks_path = os.environ.get(RIBBON_TASKS_ENV_VAR)
+custom_tasks_path = Path(os.environ.get(RIBBON_TASKS_ENV_VAR))
 
 if not os.path.exists(custom_tasks_path):
-    os.makedirs(custom_tasks_path, exist_ok=True)
+    os.makedirs(custom_tasks_path.parent, exist_ok=True)
 
-if not data_already_downloaded(custom_tasks_path, RIBBON_TASKS_REPO_NAME):
-    download_and_extract_data(custom_tasks_path, RIBBON_TASKS_REPO_NAME) #we name it Ribbon-Tasks
+if not data_already_downloaded(custom_tasks_path.parent, custom_tasks_path.name):
+    download_and_extract_data(custom_tasks_path.parent, custom_tasks_path.name)
 else:
     print("Data files already present in:", custom_tasks_path)
 
 # Run import
 # Add the custom_tasks_path to sys.path temporarily
-from .config import TASKS_DIR
-print(f"Importing custom 'ribbon_tasks' package from '{TASKS_DIR}'")
-parent_dir = os.path.dirname(TASKS_DIR)
+print(f"Importing custom 'ribbon_tasks' package from '{TASKS_MODULE_DIR}'")
+parent_dir = os.path.dirname(TASKS_MODULE_DIR)
 sys.path.insert(0, parent_dir)
 
 try:

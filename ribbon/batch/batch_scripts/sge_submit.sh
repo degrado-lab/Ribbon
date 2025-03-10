@@ -7,7 +7,7 @@
 
 echo "Running on $(hostname)"
 echo "Starting at $(date)"
-echo "TASK_DIR: $RIBBON_TASKS_DIR"
+echo "TASK_DIR: $RIBBON_TASKS_MODULE_DIR"
 echo "DEVICE: $DEVICE"
 
 # if $DEVICE is CPU, set NV to "". Otherwise, set NV to "--nv"

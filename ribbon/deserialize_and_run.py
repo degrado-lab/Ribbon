@@ -1,5 +1,5 @@
 from ribbon import deserialize
-from ribbon.config import TASK_CACHE_DIR
+from ribbon.config import TASK_CACHE_DIR, RIBBON_TASKS_MODULE_ENV_VAR
 import argparse
 import os
 import sys
@@ -26,11 +26,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    # Check if RIBBON_TASKS_DIR is set, and add it to sys.path if so.
+    # Check if RIBBON_TASKS_MODULE_DIR is set, and add it to sys.path if so.
     # This is necessary because of how pickles handle paths and module references.
-    ribbon_tasks_dir = os.getenv("RIBBON_TASKS_DIR")
-    if ribbon_tasks_dir:
-        sys.path.insert(0, ribbon_tasks_dir)
+    ribbon_tasks_module_dir = os.getenv(RIBBON_TASKS_MODULE_ENV_VAR)
+    if ribbon_tasks_module_dir:
+        sys.path.insert(0, ribbon_tasks_module_dir)
     
     # Deserialize the task:
     task = deserialize(args.task_name, cache_dir=args.cache_dir)

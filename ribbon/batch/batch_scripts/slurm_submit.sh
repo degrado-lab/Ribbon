@@ -7,7 +7,7 @@
 
 echo "Running on $(hostname)"
 echo "Starting at $(date)"
-echo "TASK_DIR: $RIBBON_TASKS_DIR"
+echo "TASK_DIR: $RIBBON_TASKS_MODULE_DIR"
 
 echo apptainer run --nv $ribbon_container python $ribbon_deserialize_script $serialized_job
 

@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 import pickle
 from ribbon.batch.queue_utils import sge_check_job_status, slurm_check_job_status
-from ribbon.config import DOWNLOAD_DIR, TASKS_DIR, TASK_CACHE_DIR
+from ribbon.config import DOWNLOAD_DIR, TASKS_MODULE_DIR, TASK_CACHE_DIR
 import uuid
 import datetime
 import time
@@ -56,8 +56,8 @@ def verify_container(software_name):
     """
    # Get the container local path and ORAS URL:
     import json
-    print('TASKS_DIR:', TASKS_DIR)
-    with open( TASKS_DIR / 'containers.json') as f:
+    print('TASKS_MODULE_DIR:', TASKS_MODULE_DIR)
+    with open( TASKS_MODULE_DIR / 'containers.json') as f:
         containers = json.load(f)
 
     # Our database maps software names to container names and ORAS URLs

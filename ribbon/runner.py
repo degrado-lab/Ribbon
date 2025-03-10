@@ -1,7 +1,7 @@
 import ribbon.utils as utils
 import ribbon.batch.queue_utils as queue_utils
 from pathlib import Path
-from ribbon.config import TASKS_DIR
+from ribbon.config import TASKS_MODULE_DIR
 import json
 import os
 import re
@@ -74,7 +74,7 @@ class Task:
         job_variables = f"ribbon_container={container_path}," \
                         f"ribbon_deserialize_script={deserialize_script}," \
                         f"serialized_job={serialized_task}," \
-                        f"RIBBON_TASKS_DIR={os.getenv('RIBBON_TASKS_DIR')}," \
+                        f"RIBBON_TASKS_MODULE_DIR={os.getenv('RIBBON_TASKS_MODULE_DIR')}," \
                         f"DEVICE={self.device}"
         
 
@@ -201,7 +201,7 @@ class Task:
         Returns the dictionary for a given task.
         """
         # Which inputs does our task require?
-        with open(TASKS_DIR / 'tasks.json') as f:
+        with open(TASKS_MODULE_DIR / 'tasks.json') as f:
             tasks = json.load(f)
 
         return tasks[task_name]
