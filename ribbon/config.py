@@ -35,13 +35,13 @@ RIBBON_TASKS_ENV_VAR = "RIBBON_TASKS_DIR"
 # The environment variable that points to the MODULE (by default, it's DEFAULT_TASKS_DIR/ribbon_tasks)
 RIBBON_TASKS_MODULE_ENV_VAR = "RIBBON_TASKS_MODULE_DIR"
 
-# When we download it, we'll rename the directory to this (otherwise, it'll have a branch suffix):
-# remove the leading 'v' from release tag:
-#RIBBON_TASKS_REPO_NAME = f"Ribbon-Tasks-{RELEASE_TAG}"
-
 def get_data_directory():
     """Return the directory where data files should reside."""
-    return os.environ.get(RIBBON_TASKS_ENV_VAR, str(DEFAULT_TASKS_DIR))
+    data_dir = os.environ.get(RIBBON_TASKS_ENV_VAR, str(DEFAULT_TASKS_DIR))
+    # double check - is it set to an empty string?
+    if data_dir.strip() == "":
+        data_dir = str(DEFAULT_TASKS_DIR)
+    return data_dir
 
 # Setting the variables from above:
 os.environ[RIBBON_TASKS_ENV_VAR] = get_data_directory()

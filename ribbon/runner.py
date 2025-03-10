@@ -74,7 +74,7 @@ class Task:
         job_variables = f"ribbon_container={container_path}," \
                         f"ribbon_deserialize_script={deserialize_script}," \
                         f"serialized_job={serialized_task}," \
-                        f"RIBBON_TASKS_MODULE_DIR={os.getenv('RIBBON_TASKS_MODULE_DIR')}," \
+                        f"RIBBON_TASKS_DIR={os.getenv('RIBBON_TASKS_DIR')}," \
                         f"DEVICE={self.device}"
         
 
