@@ -20,7 +20,7 @@ TASK_CACHE_DIR = ribbon_dir / "ribbon_cache"
 # This way, the user can define tasks in their local environment, and have them run on a cluster without any extra steps.
 
 # Github link for Tasks repo:
-RELEASE_TAG = "v0.1.2"  # update this with your desired release tag
+RELEASE_TAG = "v0.1.3"  # update this with your desired release tag
 GITHUB_ZIP_URL = f"https://github.com/degrado-lab/Ribbon-Tasks/archive/refs/tags/{RELEASE_TAG}.zip"
 # The version-tag is the release tag without the leading 'v':
 if RELEASE_TAG[0] == 'v':
