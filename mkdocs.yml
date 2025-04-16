@@ -32,7 +32,7 @@ nav:
     - usage/3_queueing_part_2.md
     - usage/3_queueing_part_3.md
   - API Reference:
-      - Ribbon Tasks: api/ribbon_tasks/ribbon_tasks.md
+      - Ribbon Tasks: https://degrado-lab.github.io/Ribbon-Tasks/
       - Core Ribbon Task: api/runner.md
       - Batch Processing: api/batch/batch.md
       - Config: api/config.md
