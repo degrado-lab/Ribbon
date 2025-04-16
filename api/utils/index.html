@@ -70,7 +70,7 @@
               </ul>
               <p class="caption"><span class="caption-text">API Reference</span></p>
               <ul class="current">
-                  <li class="toctree-l1"><a class="reference internal" href="../ribbon_tasks/ribbon_tasks/">Ribbon Tasks</a>
+                  <li class="toctree-l1"><a class="" href="https://degrado-lab.github.io/Ribbon-Tasks/">Ribbon Tasks</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../runner/">Core Ribbon Task</a>
                   </li>
@@ -156,15 +156,15 @@ Otherwise, deletes only files that are older than 1 day.</p>
 
             <details class="quote">
               <summary>Source code in <code>ribbon/utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">162</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
 <span class="normal">163</span>
 <span class="normal">164</span>
 <span class="normal">165</span>
 <span class="normal">166</span>
 <span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clean_cache</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="normal">168</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clean_cache</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Cleans the cache directory. If all=True, deletes all files.</span>
 <span class="sd">    Otherwise, deletes only files that are older than 1 day.</span>
@@ -246,7 +246,9 @@ Otherwise, deletes only files that are older than 1 day.</p>
 </table>
             <details class="quote">
               <summary>Source code in <code>ribbon/utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">139</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
 <span class="normal">140</span>
 <span class="normal">141</span>
 <span class="normal">142</span>
@@ -265,9 +267,7 @@ Otherwise, deletes only files that are older than 1 day.</p>
 <span class="normal">155</span>
 <span class="normal">156</span>
 <span class="normal">157</span>
-<span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">deserialize</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">deserialize</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads a Python object from a file.</span>
 
 <span class="sd">    Args:</span>
@@ -364,7 +364,8 @@ Otherwise, deletes only files that are older than 1 day.</p>
 </table>
             <details class="quote">
               <summary>Source code in <code>ribbon/utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">75</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">74</span>
+<span class="normal">75</span>
 <span class="normal">76</span>
 <span class="normal">77</span>
 <span class="normal">78</span>
@@ -381,8 +382,7 @@ Otherwise, deletes only files that are older than 1 day.</p>
 <span class="normal">89</span>
 <span class="normal">90</span>
 <span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">download_container</span><span class="p">(</span><span class="n">container_local_path</span><span class="p">,</span> <span class="n">container_ORAS_URL</span><span class="p">):</span>
+<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">download_container</span><span class="p">(</span><span class="n">container_local_path</span><span class="p">,</span> <span class="n">container_ORAS_URL</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Downloads a container to the download directory, DOWNLOAD_DIR, from ribbon.config.</span>
 
@@ -589,7 +589,8 @@ Otherwise, returns prints the stdout and stderr.</p>
 
             <details class="quote">
               <summary>Source code in <code>ribbon/utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 94</span>
+<span class="normal"> 95</span>
 <span class="normal"> 96</span>
 <span class="normal"> 97</span>
 <span class="normal"> 98</span>
@@ -603,8 +604,7 @@ Otherwise, returns prints the stdout and stderr.</p>
 <span class="normal">106</span>
 <span class="normal">107</span>
 <span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="normal">109</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Runs a command in the shell.</span>
 <span class="sd">    If capture_output=True, returns the stdout and stderr.</span>
@@ -693,7 +693,8 @@ Otherwise, returns prints the stdout and stderr.</p>
 </table>
             <details class="quote">
               <summary>Source code in <code>ribbon/utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">112</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">111</span>
+<span class="normal">112</span>
 <span class="normal">113</span>
 <span class="normal">114</span>
 <span class="normal">115</span>
@@ -716,9 +717,7 @@ Otherwise, returns prints the stdout and stderr.</p>
 <span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves a Python object to a file. A random filename is generated, and it is saved to the save_dir.</span>
 
 <span class="sd">    Args:</span>
@@ -731,7 +730,6 @@ Otherwise, returns prints the stdout and stderr.</p>
     <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">save_dir</span> <span class="o">=</span> <span class="n">TASK_CACHE_DIR</span>
     <span class="c1"># Make sure the directory exists:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
     <span class="n">save_dir</span> <span class="o">=</span> <span class="n">make_directory</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving object to:&#39;</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
@@ -836,8 +834,7 @@ Otherwise, returns prints the stdout and stderr.</p>
 <span class="normal">69</span>
 <span class="normal">70</span>
 <span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">verify_container</span><span class="p">(</span><span class="n">software_name</span><span class="p">):</span>
+<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">verify_container</span><span class="p">(</span><span class="n">software_name</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Verifies that the container for the given software is downloaded. If not, downloads it to DOWNLOAD_DIR from ribbon.config.</span>
 
@@ -849,8 +846,7 @@ Otherwise, returns prints the stdout and stderr.</p>
 <span class="sd">    &quot;&quot;&quot;</span>
    <span class="c1"># Get the container local path and ORAS URL:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;TASKS_DIR:&#39;</span><span class="p">,</span> <span class="n">TASKS_DIR</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="n">TASKS_DIR</span> <span class="o">/</span> <span class="s1">&#39;containers.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="n">TASKS_MODULE_DIR</span> <span class="o">/</span> <span class="s1">&#39;containers.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">containers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
     <span class="c1"># Our database maps software names to container names and ORAS URLs</span>
@@ -950,7 +946,9 @@ Otherwise, returns prints the stdout and stderr.</p>
 
             <details class="quote">
               <summary>Source code in <code>ribbon/utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">172</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
 <span class="normal">173</span>
 <span class="normal">174</span>
 <span class="normal">175</span>
@@ -1003,9 +1001,7 @@ Otherwise, returns prints the stdout and stderr.</p>
 <span class="normal">222</span>
 <span class="normal">223</span>
 <span class="normal">224</span>
-<span class="normal">225</span>
-<span class="normal">226</span>
-<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">wait_for_jobs</span><span class="p">(</span><span class="n">job_ids</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">max_wait</span><span class="o">=</span><span class="mi">3600</span><span class="p">):</span>
+<span class="normal">225</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">wait_for_jobs</span><span class="p">(</span><span class="n">job_ids</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">max_wait</span><span class="o">=</span><span class="mi">3600</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Waits for a list of job IDs to complete. Returns when all jobs are completed, or when max_wait is exceeded.</span>
 
