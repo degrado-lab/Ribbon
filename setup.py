@@ -8,7 +8,14 @@ setup(
     author_email='nicholas.freitas@ucsf.edu',
     packages=find_packages(include=['ribbon', 'ribbon.*', 'ribbon_tasks', 'ribbon_tasks.*']),
     include_package_data=True,
-    install_requires=[],
+    install_requires=[
+        'tomli>=1.2.0; python_version<"3.11"',  # TOML support for older Python versions
+    ],
+    entry_points={
+        'console_scripts': [
+            'ribbon=ribbon.cli.cli:main',
+        ],
+    },
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',

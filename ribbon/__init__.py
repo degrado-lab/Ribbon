@@ -1,16 +1,16 @@
 # Import some utility functions to top level
 from .utils import clean_cache, serialize, deserialize, wait_for_jobs
-from .config import RIBBON_TASKS_ENV_VAR, GITHUB_ZIP_URL, TASKS_MODULE_DIR, DEFAULT_TASKS_DIR
+from .config import TASKS_MODULE_DIR, TASKS_DIR, TASKS_VERSION
 from pathlib import Path
 import os
 import sys
 
-def data_already_downloaded(data_dir, repo_name):
+def data_already_downloaded(repo_dir):
     """
     Check if data appears to be downloaded.
     For example, by checking for a marker file that should be present.
     """
-    marker_file = os.path.join(data_dir, repo_name, "README.md")  # adjust this to a file that should exist
+    marker_file = os.path.join(repo_dir, "README.md")  # adjust this to a file that should exist
     return os.path.exists(marker_file)
 
 def download_and_extract_data(data_dir, repo_name):
@@ -38,21 +38,17 @@ def download_and_extract_data(data_dir, repo_name):
     print("Ribbon Task files downloaded and extracted to:", final_dir)
 
 ### Ensure that the required data files are available.
-# The environment variable will be set automatically by config.py if it's not already set by the user.
-custom_tasks_path = Path(os.environ.get(RIBBON_TASKS_ENV_VAR))
+# Use the configured tasks path from config.toml
+if not os.path.exists(TASKS_DIR):
+    os.makedirs(TASKS_DIR, exist_ok=True)
 
-if not os.path.exists(custom_tasks_path):
-    os.makedirs(custom_tasks_path.parent, exist_ok=True)
-
-if not data_already_downloaded(custom_tasks_path.parent, custom_tasks_path.name):
-    # Are we using the default?
-    if custom_tasks_path == DEFAULT_TASKS_DIR:
-        download_and_extract_data(custom_tasks_path.parent, custom_tasks_path.name)
-    # Otherwise, the user has asked to use a custom directory, but it doesn't exist.
-    else:
-        raise FileNotFoundError(f"Asked to use custom tasks directory '{custom_tasks_path}', but it doesn't exist.")
+if not data_already_downloaded(TASKS_MODULE_DIR):
+    print('NOT DOWNLOADED!')
+    # Download task files using the configured version
+    GITHUB_ZIP_URL = f"https://github.com/degrado-lab/Ribbon-Tasks/archive/refs/tags/{TASKS_VERSION}.zip"
+    download_and_extract_data(TASKS_DIR / TASKS_VERSION, TASKS_MODULE_DIR.name)
 else:
-    print("Data files already present in:", custom_tasks_path)
+    print("Data files already present in:", TASKS_DIR)
 
 # Run import
 # Add the custom_tasks_path to sys.path temporarily
