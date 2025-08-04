@@ -1,0 +1,9 @@
+Create config_parser.py that handles config file
+
+Improve existing config.py
+
+Refactor how the __import__ code works, calling config, etc. Should be fast and seamless
+
+Probably add CLI code in here too, or into it's own submodule
+- "set" subcommands for modifying config
+

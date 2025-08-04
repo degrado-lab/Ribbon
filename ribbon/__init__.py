@@ -1,6 +1,6 @@
 # Import some utility functions to top level
+from .config.config import CONTAINER_DIR, CACHE_DIR, TASKS_DIR, TASKS_MODULE_DIR, TASKS_VERSION
 from .utils import clean_cache, serialize, deserialize, wait_for_jobs
-from .config import TASKS_MODULE_DIR, TASKS_DIR, TASKS_VERSION
 from pathlib import Path
 import os
 import sys
@@ -10,7 +10,7 @@ def data_already_downloaded(repo_dir):
     Check if data appears to be downloaded.
     For example, by checking for a marker file that should be present.
     """
-    marker_file = os.path.join(repo_dir, "README.md")  # adjust this to a file that should exist
+    marker_file = os.path.join(repo_dir.parent, "README.md")  # adjust this to a file that should exist
     return os.path.exists(marker_file)
 
 def download_and_extract_data(data_dir, repo_name):
@@ -20,6 +20,11 @@ def download_and_extract_data(data_dir, repo_name):
     import zipfile
     import io
     import shutil
+
+    print(data_dir, repo_name)
+    
+    # Get existing items before extraction
+    existing_items = set(os.listdir(data_dir)) if os.path.exists(data_dir) else set()
     
     try:
         with urllib.request.urlopen(GITHUB_ZIP_URL) as response:
@@ -33,9 +38,22 @@ def download_and_extract_data(data_dir, repo_name):
     except Exception as e:
         raise RuntimeError("Failed to extract data: " + str(e))
     
-    final_dir = os.path.join(data_dir, repo_name)
+    # Find the newly extracted directory
+    current_items = set(os.listdir(data_dir))
+    new_items = current_items - existing_items
+    new_dirs = [item for item in new_items if os.path.isdir(os.path.join(data_dir, item))]
     
-    print("Ribbon Task files downloaded and extracted to:", final_dir)
+    if len(new_dirs) == 1:
+        original_dir = os.path.join(data_dir, new_dirs[0])
+        target_dir = os.path.join(data_dir, repo_name)
+        if original_dir != target_dir:
+            shutil.move(original_dir, target_dir)
+            print(f"Renamed extracted directory to: {repo_name}")
+    elif len(new_dirs) > 1:
+        print(f"Warning: Multiple new directories found after extraction: {new_dirs}")
+    else:
+        print("Warning: No new directory found after extraction")
+    
 
 ### Ensure that the required data files are available.
 # Use the configured tasks path from config.toml
@@ -43,10 +61,9 @@ if not os.path.exists(TASKS_DIR):
     os.makedirs(TASKS_DIR, exist_ok=True)
 
 if not data_already_downloaded(TASKS_MODULE_DIR):
-    print('NOT DOWNLOADED!')
     # Download task files using the configured version
     GITHUB_ZIP_URL = f"https://github.com/degrado-lab/Ribbon-Tasks/archive/refs/tags/{TASKS_VERSION}.zip"
-    download_and_extract_data(TASKS_DIR / TASKS_VERSION, TASKS_MODULE_DIR.name)
+    download_and_extract_data(TASKS_DIR / TASKS_VERSION, TASKS_MODULE_DIR.parent.name)
 else:
     print("Data files already present in:", TASKS_DIR)
 
