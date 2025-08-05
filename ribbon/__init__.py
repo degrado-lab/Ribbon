@@ -65,11 +65,12 @@ if not data_already_downloaded(TASKS_MODULE_DIR):
     GITHUB_ZIP_URL = f"https://github.com/degrado-lab/Ribbon-Tasks/archive/refs/tags/{TASKS_VERSION}.zip"
     download_and_extract_data(TASKS_DIR / TASKS_VERSION, TASKS_MODULE_DIR.parent.name)
 else:
-    print("Data files already present in:", TASKS_DIR)
+    #print("Data files already present in:", TASKS_DIR)
+    pass
 
 # Run import
 # Add the custom_tasks_path to sys.path temporarily
-print(f"Importing custom 'ribbon_tasks' package from '{TASKS_MODULE_DIR}'")
+# print(f"Importing custom 'ribbon_tasks' package from '{TASKS_MODULE_DIR}'")
 parent_dir = os.path.dirname(TASKS_MODULE_DIR)
 sys.path.insert(0, parent_dir)
 
