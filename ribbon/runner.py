@@ -1,7 +1,7 @@
 import ribbon.utils as utils
 import ribbon.batch.queue_utils as queue_utils
 from pathlib import Path
-from ribbon.config import TASKS_MODULE_DIR
+from ribbon.config import TASKS_MODULE_DIR, RIBBON_HOME
 import json
 import os
 import re
@@ -75,7 +75,7 @@ class Task:
         job_variables = f"ribbon_container={container_path}," \
                         f"ribbon_deserialize_script={deserialize_script}," \
                         f"serialized_job={serialized_task}," \
-                        f"RIBBON_HOME={os.getenv('RIBBON_HOME')}," \
+                        f"RIBBON_HOME={RIBBON_HOME}," \
                         f"DEVICE={self.device}"
         
 

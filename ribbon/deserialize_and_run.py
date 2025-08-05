@@ -1,5 +1,5 @@
 from ribbon import deserialize
-from ribbon.config import TASK_CACHE_DIR, CONFIG_FILE, TASKS_MODULE_DIR
+from ribbon.config import CACHE_DIR, CONFIG_FILE, TASKS_MODULE_DIR
 import argparse
 import os
 import sys
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Deserialize and run a task.')
 
     parser.add_argument('task_name', type=str, help='The name of the task to run.')
-    parser.add_argument('--cache_dir', type=str, default=TASK_CACHE_DIR, help='The directory to store the task cache.')
+    parser.add_argument('--cache_dir', type=str, default=CACHE_DIR, help='The directory to store the task cache.')
 
     args = parser.parse_args()
 
