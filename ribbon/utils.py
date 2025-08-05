@@ -46,7 +46,7 @@ def make_directory(directory):
 
 def verify_container(software_name):
     """
-    Verifies that the container for the given software is downloaded. If not, downloads it to CONTAINER_DIR_DIR from ribbon.config.
+    Verifies that the container for the given software is downloaded. If not, downloads it to CONTAINER_DIR from ribbon.config.
 
     Args:
         software_name (str): The name of the software to verify the container for.
@@ -62,7 +62,7 @@ def verify_container(software_name):
     # Our database maps software names to container names and ORAS URLs
     # Example:  {"LigandMPNN": ["ligandMPNN.sif", "oras://docker.io/nicholasfreitas/ligandmpnn:latest"]}
     container_local_name, container_ORAS_URL = containers[software_name]
-    container_local_path = CONTAINER_DIR_DIR / container_local_name
+    container_local_path = CONTAINER_DIR / container_local_name
 
     # Is the container already downloaded?
     if not os.path.exists(container_local_path):
@@ -73,7 +73,7 @@ def verify_container(software_name):
 
 def download_container(container_local_path, container_ORAS_URL):
     """
-    Downloads a container to the download directory, CONTAINER_DIR_DIR, from ribbon.config.
+    Downloads a container to the download directory, CONTAINER_DIR, from ribbon.config.
 
     Args:
         container_local_path (str): The path to the container to download.
@@ -83,7 +83,7 @@ def download_container(container_local_path, container_ORAS_URL):
         None
     """
     # Make sure downloads directory exists:
-    make_directories(CONTAINER_DIR_DIR)
+    make_directories(CONTAINER_DIR)
 
     # Download the container to the download_dir
     command = f'apptainer pull {container_local_path} {container_ORAS_URL}'

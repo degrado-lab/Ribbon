@@ -95,10 +95,15 @@ def initialize():
             
         # Import the custom ribbon_tasks package
         import ribbon_tasks
-        #from ribbon_tasks import *
         
         # Add to globals so they're available at module level
         globals()['ribbon_tasks'] = ribbon_tasks
+        
+        # Dynamically add all public attributes from ribbon_tasks to the current module's globals
+        # We do this here because we can't use `from ribbon_tasks import *` at the function-level
+        for attr_name in dir(ribbon_tasks):
+            if not attr_name.startswith('_'):  # Only import public attributes
+                globals()[attr_name] = getattr(ribbon_tasks, attr_name)
         
     except ImportError as e:
         raise ImportError(f"Failed to import custom 'ribbon_tasks' package: {e}")
