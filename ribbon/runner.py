@@ -71,10 +71,11 @@ class Task:
         deserialize_script = Path(MODULE_DIR) / 'deserialize_and_run.py'
         
         # Prepare job variables:
+        #f"RIBBON_TASKS_DIR={os.getenv('RIBBON_TASKS_DIR')}," \
         job_variables = f"ribbon_container={container_path}," \
                         f"ribbon_deserialize_script={deserialize_script}," \
                         f"serialized_job={serialized_task}," \
-                        f"RIBBON_TASKS_DIR={os.getenv('RIBBON_TASKS_DIR')}," \
+                        f"RIBBON_HOME={os.getenv('RIBBON_HOME')}," \
                         f"DEVICE={self.device}"
         
 

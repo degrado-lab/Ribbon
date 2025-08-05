@@ -5,7 +5,7 @@ from pathlib import Path
 import argparse
 import urllib
 
-from ribbon.config import CONFIG_FILE, CACHE_DIR, TASKS_DIR, GITHUB_API_URL, TASKS_VERSION
+from ribbon.config import RIBBON_HOME, CONFIG_FILE, CACHE_DIR, TASKS_DIR, CONTAINER_DIR, GITHUB_API_URL, TASKS_VERSION
 from ribbon.config.parse_config import write_config_file
 
 def fetch_remote_releases():
@@ -99,28 +99,30 @@ def use(tag):
     write_config_file(CONFIG_FILE, config)
 
     # Re-import ribbon, so the new tasks_version is loaded:
-    import importlib
-    import ribbon
-    importlib.reload(ribbon)
+    try:
+        import ribbon
+        ribbon.initialize()
+        print("Successfully reloaded Ribbon with new tasks version.")
+    except Exception as e:
+        print(f"Warning: Could not reload Ribbon tasks: {e}")
+        print("You may need to restart your Python session for changes to take effect.")
 
     print(f"Set active Ribbon-Tasks version to: {tag}")
 
 def info():
     """Print information about the current Ribbon configuration."""
     print(f"Current Ribbon configuration:")
-    print(f"  Config file: {CONFIG_FILE}")
-    print(f"  Cache directory: {CACHE_DIR}")
-    print(f"  GitHub API URL: {GITHUB_API_URL}")
-    print(f"  Active tasks version: {TASKS_VERSION}")
+    print(f"  Ribbon home directory: \t{RIBBON_HOME}")
+    print(f"  Config file: \t\t\t{CONFIG_FILE}")
+    print(f"  Cache directory: \t\t{CACHE_DIR}")
+    print(f"  Container directory: \t\t{CONTAINER_DIR}")
+    print(f"  Tasks directory: \t\t{TASKS_DIR}")
+    print(f"  GitHub API URL: \t\t{GITHUB_API_URL}")
+    print(f"  Active tasks version: \t{TASKS_VERSION}")
 
 def main():
     parser = argparse.ArgumentParser(description="Manage Ribbon task definitions.")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
-
-    # Install command
-    install_parser = subparsers.add_parser("install", help="Install a specific version of Ribbon tasks.")
-    install_parser.add_argument("tag", type=str, default="latest", nargs="?", 
-                               help="GitHub release tag to install (default: latest).")
 
     # List command
     list_parser = subparsers.add_parser("list", help="List all available Ribbon-Tasks versions.")
@@ -133,10 +135,8 @@ def main():
     info_parser = subparsers.add_parser("info", help="Print information about the current Ribbon configuration.")
 
     args = parser.parse_args()
-    
-    if args.command == "install":
-        install(args.tag)
-    elif args.command == "list":
+
+    if args.command == "list":
         list_tasks()
     elif args.command == "use":
         use(args.tag)
