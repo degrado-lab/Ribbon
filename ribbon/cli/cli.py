@@ -120,6 +120,20 @@ def info():
     print(f"  GitHub API URL: \t\t{GITHUB_API_URL}")
     print(f"  Active tasks version: \t{TASKS_VERSION}")
 
+def deserialize_and_run(file):
+    """Deserialize and run a Ribbon task definition from a file."""
+    from ribbon import deserialize
+
+    if not os.path.exists(file):
+        print(f"Error: File '{file}' does not exist.")
+        return
+
+    # Deserialize the task:
+    task = deserialize(file)
+
+    # Run the task:
+    task.run()
+
 def main():
     parser = argparse.ArgumentParser(description="Manage Ribbon task definitions.")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
@@ -134,6 +148,10 @@ def main():
     # Info command
     info_parser = subparsers.add_parser("info", help="Print information about the current Ribbon configuration.")
 
+    # Deserialize and run command:
+    deserialize_parser = subparsers.add_parser("deserialize_and_run", help="Deserialize and run a Ribbon task definition from a file (Used internally when queuing tasks).")
+    deserialize_parser.add_argument("file", type=str, help="Path to the file containing the task definition.")
+
     args = parser.parse_args()
 
     if args.command == "list":
@@ -142,6 +160,8 @@ def main():
         use(args.tag)
     elif args.command == "info":
         info()
+    elif args.command == "deserialize_and_run":
+        deserialize_and_run(args.file)
     else:
         parser.print_help()
 
