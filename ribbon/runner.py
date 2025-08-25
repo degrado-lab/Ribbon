@@ -150,6 +150,9 @@ class Task:
         # Add extra_args to kwargs:
         kwargs['extra_args'] = extra_args
 
+        # Add TASKS_MODULE_DIR to kwargs:
+        kwargs['TASKS_MODULE_DIR'] = TASKS_MODULE_DIR
+
         # Which inputs does our task require?
         required_inputs = self._get_task_inputs(task_name)
 
@@ -173,7 +176,7 @@ class Task:
         # Verify we have the container associated with the software we want to run. 
         # If not, attempt to download it to the download_dir
         container_path = utils.verify_container(container_name)
-        
+
         # Add inputs to the command, by replacing the placeholders in the command string:
         command = task_dict['command']
         for input in required_inputs:
