@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 import pickle
 from ribbon.batch.queue_utils import sge_check_job_status, slurm_check_job_status
-from ribbon.config import DOWNLOAD_DIR, TASKS_MODULE_DIR, TASK_CACHE_DIR
+from ribbon.config.config import CONTAINER_DIR, TASKS_MODULE_DIR, CACHE_DIR
 import uuid
 import datetime
 import time
@@ -46,7 +46,7 @@ def make_directory(directory):
 
 def verify_container(software_name):
     """
-    Verifies that the container for the given software is downloaded. If not, downloads it to DOWNLOAD_DIR from ribbon.config.
+    Verifies that the container for the given software is downloaded. If not, downloads it to CONTAINER_DIR from ribbon.config.
 
     Args:
         software_name (str): The name of the software to verify the container for.
@@ -62,7 +62,7 @@ def verify_container(software_name):
     # Our database maps software names to container names and ORAS URLs
     # Example:  {"LigandMPNN": ["ligandMPNN.sif", "oras://docker.io/nicholasfreitas/ligandmpnn:latest"]}
     container_local_name, container_ORAS_URL = containers[software_name]
-    container_local_path = DOWNLOAD_DIR / container_local_name
+    container_local_path = CONTAINER_DIR / container_local_name
 
     # Is the container already downloaded?
     if not os.path.exists(container_local_path):
@@ -73,7 +73,7 @@ def verify_container(software_name):
 
 def download_container(container_local_path, container_ORAS_URL):
     """
-    Downloads a container to the download directory, DOWNLOAD_DIR, from ribbon.config.
+    Downloads a container to the download directory, CONTAINER_DIR, from ribbon.config.
 
     Args:
         container_local_path (str): The path to the container to download.
@@ -83,7 +83,7 @@ def download_container(container_local_path, container_ORAS_URL):
         None
     """
     # Make sure downloads directory exists:
-    make_directories(DOWNLOAD_DIR)
+    make_directories(CONTAINER_DIR)
 
     # Download the container to the download_dir
     command = f'apptainer pull {container_local_path} {container_ORAS_URL}'
@@ -113,13 +113,13 @@ def serialize(obj, save_dir=None):
 
     Args:
         obj: the Python object to save.
-        save_dir: the directory to save the object. If None, uses TASK_CACHE_DIR from ribbon.config.
+        save_dir: the directory to save the object. If None, uses CACHE_DIR from ribbon.config.
 
     Returns: 
         Path: path object of the saved file.
     """
     if save_dir is None:
-        save_dir = TASK_CACHE_DIR
+        save_dir = CACHE_DIR
     # Make sure the directory exists:
     save_dir = make_directory(save_dir)
 
@@ -139,7 +139,7 @@ def deserialize(filename, cache_dir=None):
     
     Args:
         filename: the filename to load the object from.
-        cache_dir: the directory to load the object from. If None, uses TASK_CACHE_DIR from ribbon.config.
+        cache_dir: the directory to load the object from. If None, uses CACHE_DIR from ribbon.config.
         
     Returns:
         object: the Python object loaded from the file.
@@ -147,7 +147,7 @@ def deserialize(filename, cache_dir=None):
 
     # Make sure we have the full path:
     if cache_dir is None:
-        cache_dir = TASK_CACHE_DIR
+        cache_dir = CACHE_DIR
     cache_dir = make_directory(cache_dir)
 
     filename = Path(filename)
@@ -162,7 +162,7 @@ def clean_cache(all=False):
     Cleans the cache directory. If all=True, deletes all files.
     Otherwise, deletes only files that are older than 1 day.
     """
-    for file in os.listdir(TASK_CACHE_DIR):
+    for file in os.listdir(CACHE_DIR):
         file = Path(file)
         if all or (datetime.datetime.now() - datetime.datetime.fromtimestamp(file.stat().st_mtime)).days > 1:
             os.remove(file)

@@ -9,9 +9,8 @@ echo "Running on $(hostname)"
 echo "Starting at $(date)"
 echo "TASK_DIR: $RIBBON_TASKS_MODULE_DIR"
 
-echo apptainer run --nv $ribbon_container python $ribbon_deserialize_script $serialized_job
-
-apptainer run --nv $ribbon_container python $ribbon_deserialize_script $serialized_job
+echo apptainer run $NV $ribbon_container ribbon deserialize_and_run $serialized_job
+apptainer run $NV $ribbon_container ribbon deserialize_and_run $serialized_job
 
 ## End-of-job summary, if running as a job
 [[ -n "$SLURM_JOB_ID" ]] && scontrol show job "$SLURM_JOB_ID"  # This is useful for debugging and usage purposes,

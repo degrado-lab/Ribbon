@@ -10,6 +10,6 @@ ribbon.LigandMPNN(
 
 # Then, we fold using RaptorX:
 ribbon.RaptorXSingle(
-        fasta_file_or_dir = './out/lmpnn',
+        fasta_file_or_dir = './out/lmpnn/seqs_split',
         output_dir = './out/raptorx'
 ).run()

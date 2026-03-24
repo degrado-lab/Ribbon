@@ -1,0 +1,6 @@
+{
+        "tasks_version": tasks_version,
+        "tasks_path": str(ribbon_dir / "ribbon_tasks"),
+        "containers_path": str(ribbon_dir / "ribbon_containers"),
+        "cache_path": str(ribbon_dir / "tasks_cache")
+    }
