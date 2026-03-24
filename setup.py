@@ -10,7 +10,11 @@ setup(
     include_package_data=True,
     install_requires=[
         'tomli>=1.2.0; python_version<"3.11"',  # TOML support for older Python versions
+        'typer[all]',
     ],
+    extras_require={
+        'test': ['pytest'],
+    },
     entry_points={
         'console_scripts': [
             'ribbon=ribbon.cli.cli:main',

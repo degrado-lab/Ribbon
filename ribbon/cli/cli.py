@@ -1,16 +1,26 @@
 # ribbon/cli.py
 import json
 import os
-import argparse
 import urllib
 import re
 import inspect
 import copy
 from datetime import datetime
+from typing import Optional, List
+
+import typer
+from rich.console import Console
+from rich.table import Table
 
 from ribbon.config import RIBBON_HOME, CONFIG_FILE, CACHE_DIR, TASKS_DIR, CONTAINER_DIR, GITHUB_API_URL, TASKS_VERSION
 from ribbon.config.parse_config import write_config_file
 
+app = typer.Typer(help="Manage Ribbon task definitions.", add_completion=False, no_args_is_help=True, rich_markup_mode="rich")
+
+run_app = typer.Typer(help="Run a task from the active Ribbon-Tasks module.", add_completion=False, no_args_is_help=True, rich_markup_mode="rich")
+console = Console()
+
+### HELPER FUNCTIONS ###
 def _version_sort_key(tag):
     """Sort semver-like tags ahead of custom names."""
     semver_match = re.match(r"^v?(\d+)\.(\d+)\.(\d+)$", tag)
@@ -25,33 +35,6 @@ def _version_sort_key(tag):
 
     return (0, 0, 0, 0, tag)
 
-def fetch_remote_releases(quiet=False):
-    """Fetch available releases from GitHub API using urllib."""
-    import urllib.request
-    import urllib.error
-    try:
-        with urllib.request.urlopen(GITHUB_API_URL) as response:
-            if response.getcode() == 200:
-                data = json.loads(response.read().decode())
-                return data
-            else:
-                if not quiet:
-                    print(f"Warning: Could not fetch online releases (HTTP {response.getcode()}).")
-                return []
-    except urllib.error.URLError as e:
-        if not quiet:
-            print(f"Warning: Could not fetch online releases: {e}")
-        return []
-    except json.JSONDecodeError as e:
-        if not quiet:
-            print(f"Warning: Could not parse online releases response: {e}")
-        return []
-
-def fetch_local_releases():
-    """Fetch local releases from the cache directory."""
-    local_releases = [item.name for item in TASKS_DIR.iterdir() if item.is_dir()]
-    return sorted(local_releases, key=_version_sort_key, reverse=True)
-
 def _load_tasks_file(version):
     tasks_file = TASKS_DIR / version / "Ribbon-Tasks" / "ribbon_tasks" / "tasks.json"
     if not tasks_file.exists():
@@ -61,10 +44,10 @@ def _load_tasks_file(version):
         with open(tasks_file) as f:
             return json.load(f), tasks_file
     except json.JSONDecodeError as e:
-        print(f"Error: Invalid JSON in task definition file '{tasks_file}': {e}")
+        console.print(f"[red]Error: Invalid JSON in task definition file '{tasks_file}': {e}[/red]")
         return None, tasks_file
     except Exception as e:
-        print(f"Error reading task definition file '{tasks_file}': {e}")
+        console.print(f"[red]Error reading task definition file '{tasks_file}': {e}[/red]")
         return None, tasks_file
 
 def _extract_inputs_from_command(command):
@@ -76,9 +59,42 @@ def _extract_inputs_from_command(command):
             ordered_inputs.append(match)
     return ordered_inputs
 
-def list_versions(include_remote=True, output_json=False):
+### FETCHING RELEASES ###
+def fetch_remote_releases(quiet=False):
+    """Fetch available releases from GitHub API using urllib."""
+    import urllib.request
+    import urllib.error
+    try:
+        with urllib.request.urlopen(GITHUB_API_URL) as response:
+            if response.getcode() == 200:
+                data = json.loads(response.read().decode())
+                return data
+            else:
+                if not quiet:
+                    console.print(f"[yellow]Warning: Could not fetch online releases (HTTP {response.getcode()}).[/yellow]")
+                return []
+    except urllib.error.URLError as e:
+        if not quiet:
+            console.print(f"[yellow]Warning: Could not fetch online releases: {e}[/yellow]")
+        return []
+    except json.JSONDecodeError as e:
+        if not quiet:
+            console.print(f"[yellow]Warning: Could not parse online releases response: {e}[/yellow]")
+        return []
+
+def fetch_local_releases():
+    """Fetch local releases from the cache directory."""
+    local_releases = [item.name for item in TASKS_DIR.iterdir() if item.is_dir()]
+    return sorted(local_releases, key=_version_sort_key, reverse=True)
+
+### MAIN COMMANDS ###
+
+def list_versions_cmd(
+    offline: bool = False,
+    output_json: bool = False
+):
     """List available Ribbon-Tasks versions."""
-    releases = fetch_remote_releases(quiet=output_json) if include_remote else []
+    releases = fetch_remote_releases(quiet=output_json) if not offline else []
     remote_release_tags = {release.get("tag_name") for release in releases}
 
     local_releases = [
@@ -104,41 +120,59 @@ def list_versions(include_remote=True, output_json=False):
             output["custom_releases"].append(
                 {"tag": tag, "modified_at": modified_date, "is_active": tag == TASKS_VERSION}
             )
-        print(json.dumps(output, indent=2))
+        console.print(json.dumps(output, indent=2))
         return
 
-    if include_remote:
+    if not offline:
+        table = Table(title="Official Releases", box=None, padding=(0, 2))
+        table.add_column("Status", justify="center", width=6)
+        table.add_column("Version", style="cyan")
+        table.add_column("Released At", style="dim")
+
         if releases:
-            print("\nOfficial Releases:   (Released)")
             for release in releases:
                 tag = release.get("tag_name", "Unknown")
-                published = release.get("published_at", "Unknown date")
-                active = "*" if tag == TASKS_VERSION else " "
-                print(f"{active}  {tag:<15} - {published[:10]}")
+                published = release.get("published_at", "Unknown date")[:10]
+                is_active = tag == TASKS_VERSION
+                status = "[green]*[/green]" if is_active else ""
+                row_style = "bold green" if is_active else ""
+                table.add_row(status, tag, published, style=row_style)
+            console.print(table)
+            console.print("")
         else:
-            print("\nOfficial Releases:   (Released)")
-            print("Unavailable (offline or API error).")
+            console.print("\n[dim italic]No official releases found or unreachable.[/dim italic]")
 
-    print("\nCustom Releases:     (Modified)")
+    custom_table = Table(title="Custom Releases", box=None, padding=(0, 2))
+    custom_table.add_column("Status", justify="center", width=6)
+    custom_table.add_column("Version", style="cyan")
+    custom_table.add_column("Modified At", style="dim")
+
     if not local_releases:
-        print("No local versions found.")
+        console.print("\n[dim italic]No local versions found.[/dim italic]")
     else:
         for tag in local_releases:
-            active = "*" if tag == TASKS_VERSION else " "
+            is_active = tag == TASKS_VERSION
+            status = "[green]*[/green]" if is_active else ""
             modified_date = datetime.fromtimestamp((TASKS_DIR / tag).stat().st_mtime).strftime("%Y-%m-%d")
-            print(f"{active}  {tag:<15} - {modified_date}")
+            row_style = "bold green" if is_active else ""
+            custom_table.add_row(status, tag, modified_date, style=row_style)
+        console.print(custom_table)
 
-    print("")
+    console.print("")
 
-def list_task_definitions(version=None, verbose=False, output_json=False):
-    """List tasks for a Ribbon-Tasks version (defaults to active)."""
+def list_tasks_function(
+    version: Optional[str] = None,
+    verbose: bool = False,
+    output_json: bool = False
+):
+    """List tasks for a Ribbon-Tasks version."""
     target_version = version or TASKS_VERSION
     tasks, tasks_file = _load_tasks_file(target_version)
 
     if tasks is None:
-        print(f"Error: Could not load tasks for version '{target_version}'.")
-        print(f"Expected task definition file: {tasks_file}")
-        return
+        console.print(f"[red]Error: Could not load tasks for version '{target_version}'.[/red]")
+        console.print(f"Expected task definition file: {tasks_file}")
+        raise typer.Exit(code=1)
 
     task_names = sorted(tasks.keys())
 
@@ -163,38 +197,68 @@ def list_task_definitions(version=None, verbose=False, output_json=False):
                 "is_active_version": target_version == TASKS_VERSION,
                 "tasks": task_names,
             }
-        print(json.dumps(payload, indent=2))
+        console.print(json.dumps(payload, indent=2))
         return
 
     version_label = " (active)" if target_version == TASKS_VERSION else ""
-    print(f"\nTasks in Ribbon-Tasks {target_version}{version_label}:")
-    if not task_names:
-        print("No tasks found.")
-        print("")
-        return
-
+    title = f"Tasks in Ribbon-Tasks {target_version}{version_label}"
+    
     if not verbose:
+        table = Table(title=title, box=None, show_header=False, padding=(0, 2))
+        table.add_column("Task", style="cyan")
         for task_name in task_names:
-            print(f"- {task_name}")
+            table.add_row(f"- {task_name}")
+        console.print(table)
     else:
+        table = Table(title=title, box=None, padding=(0, 2))
+        table.add_column("Task", style="bold cyan")
+        table.add_column("Description", style="dim")
+        table.add_column("Container", style="magenta")
+        table.add_column("Inputs", style="dim")
+        
         for task_name in task_names:
             task = tasks.get(task_name, {})
             inputs = _extract_inputs_from_command(task.get("command", ""))
-            print(f"- {task_name}")
-            print(f"  description: {task.get('description', 'N/A')}")
-            print(f"  container:   {task.get('container', 'N/A')}")
-            print(f"  inputs:      {', '.join(inputs) if inputs else '(none)'}")
-            print("")
-        return
+            table.add_row(
+                task_name,
+                task.get('description', 'N/A'),
+                task.get('container', 'N/A'),
+                ', '.join(inputs) if inputs else "(none)"
+            )
+        console.print(table)
+    
+    console.print("")
 
-    print("")
+@app.command(name="list")
+def list_cmd(
+    target: str = typer.Argument("versions", help="What to list: versions or tasks."),
+    version: Optional[str] = typer.Option(None, "--version", help="Version to list tasks for."),
+    verbose: bool = typer.Option(False, "--verbose", help="Show task details."),
+    offline: bool = typer.Option(False, "--offline", help="Skip online release lookup."),
+    output_json: bool = typer.Option(False, "--json", help="Output results as JSON.")
+):
+    """List available Ribbon-Tasks versions or tasks."""
+    if target == "tasks":
+        list_tasks_function(version, verbose, output_json)
+    else:
+        list_versions_cmd(offline, output_json)
 
-# Backward-compatible alias for existing imports/usages.
-def list_tasks():
-    list_versions()
+@app.command()
+def info():
+    """Print information about the current Ribbon configuration."""
+    table = Table(title="Current Ribbon Configuration", show_header=False)
+    table.add_row("Ribbon home directory", str(RIBBON_HOME))
+    table.add_row("Config file", str(CONFIG_FILE))
+    table.add_row("Cache directory", str(CACHE_DIR))
+    table.add_row("Container directory", str(CONTAINER_DIR))
+    table.add_row("Tasks directory", str(TASKS_DIR))
+    table.add_row("GitHub API URL", str(GITHUB_API_URL))
+    table.add_row("Active tasks version", str(TASKS_VERSION))
+    console.print(table)
 
-def use(tag):
-    """Set the active task version."""
+@app.command()
+def use(tag: str = typer.Argument(..., help="GitHub release tag to use.")):
+    """Set the active task version. Use [i]'ribbon list'[/i] to see available versions."""
     # Open the config file TOML and update the tasks_version:
     try:
         import tomllib  # Python 3.11+
@@ -202,75 +266,67 @@ def use(tag):
         try:
             import tomli as tomllib  # fallback for older Python versions
         except ImportError:
-            print("Error: No TOML library available for reading config.")
-            return
+            console.print("[red]Error: No TOML library available for reading config.[/red]")
+            raise typer.Exit(code=1)
+    
     config = {}
     if CONFIG_FILE.exists():
         try:
             with open(CONFIG_FILE, 'rb') as f:
                 config = tomllib.load(f)
         except Exception as e:
-            print(f"Error reading config file: {e}")
-            return
+            console.print(f"[red]Error reading config file: {e}[/red]")
+            raise typer.Exit(code=1)
 
     # Check if the tag exists in the releases
     remote_release_tags = [release['tag_name'] for release in fetch_remote_releases()]
     local_release_tags = fetch_local_releases()
     if not any(release_tag == tag for release_tag in remote_release_tags + local_release_tags):
-        print(f"\nError: Tag '{tag}' not found in available releases.\n")
-        list_versions()
-        return
+        console.print(f"\n[red]Error: Tag '{tag}' not found in available releases.[/red]\n")
+        # We can call the list command logic here:
+        list_versions_cmd()
+        raise typer.Exit(code=1)
 
     config["tasks_version"] = tag
-
     write_config_file(CONFIG_FILE, config)
 
     # Re-import ribbon, so the new tasks_version is loaded:
     try:
         import ribbon
         ribbon.initialize()
-        print("Successfully reloaded Ribbon with new tasks version.")
+        console.print("[green]Successfully reloaded Ribbon with new tasks version.[/green]")
     except Exception as e:
-        print(f"Warning: Could not reload Ribbon tasks: {e}")
-        print("You may need to restart your Python session for changes to take effect.")
+        console.print(f"[yellow]Warning: Could not reload Ribbon tasks: {e}[/yellow]")
+        console.print("You may need to restart your Python session for changes to take effect.")
 
-    print(f"Set active Ribbon-Tasks version to: {tag}")
+    console.print(f"Set active Ribbon-Tasks version to: [bold]{tag}[/bold]")
 
-def info():
-    """Print information about the current Ribbon configuration."""
-    print(f"Current Ribbon configuration:")
-    print(f"  Ribbon home directory: \t{RIBBON_HOME}")
-    print(f"  Config file: \t\t\t{CONFIG_FILE}")
-    print(f"  Cache directory: \t\t{CACHE_DIR}")
-    print(f"  Container directory: \t\t{CONTAINER_DIR}")
-    print(f"  Tasks directory: \t\t{TASKS_DIR}")
-    print(f"  GitHub API URL: \t\t{GITHUB_API_URL}")
-    print(f"  Active tasks version: \t{TASKS_VERSION}")
-
-def deserialize_and_run(file):
+@app.command(name="deserialize-and-run", hidden=True)
+def deserialize_and_run_cmd(file: str = typer.Argument(..., help="Path to the file containing the task definition.")):
     """Deserialize and run a Ribbon task definition from a file."""
     from ribbon import deserialize
 
     if not os.path.exists(file):
-        print(f"Error: File '{file}' does not exist.")
-        return
+        console.print(f"[red]Error: File '{file}' does not exist.[/red]")
+        raise typer.Exit(code=1)
 
-    # Deserialize the task:
     task = deserialize(file)
-
-    # Run the task:
     task.run()
 
-
+### TASK SUBCOMMAND HELPERS ###
 def _normalize_task_name(name):
     return re.sub(r"[^a-z0-9]+", "", (name or "").lower())
 
+def _to_kebab_case(name):
+    """Convert CamelCase to kebab-case, handling digits."""
+    s1 = re.sub('([a-z0-9])([A-Z])', r'\1-\2', name or "")
+    s2 = re.sub('([a-zA-Z])([0-9])', r'\1-\2', s1)
+    return s2.lower().replace("_", "-")
 
 def _load_task_metadata(version=None):
     target_version = version or TASKS_VERSION
     tasks, _ = _load_tasks_file(target_version)
     return tasks or {}
-
 
 def _discover_task_classes():
     import ribbon
@@ -290,7 +346,6 @@ def _discover_task_classes():
         discovered[attr.__name__] = attr
 
     return discovered
-
 
 def _build_task_registry(version=None):
     task_classes = _discover_task_classes()
@@ -326,254 +381,134 @@ def _build_task_registry(version=None):
 
     return registry, aliases
 
-
 def _infer_arg_type(parameter):
     annotation = parameter.annotation
     default = parameter.default
 
-    if annotation in (int, float, str):
+    # Handle Optional[...] / Union[...] / List[...]
+    if hasattr(annotation, "__origin__"):
+        origin = annotation.__origin__
+        
+        # 1. Direct List types
+        if origin is list or origin is List:
+            return List[str]
+            
+        # 2. Union types (includes Optional)
+        # Check for both typing.Union and types.UnionType (| operator in 3.10+)
+        if str(origin).endswith('Union') or (hasattr(origin, '__name__') and 'Union' in origin.__name__):
+            args = getattr(annotation, "__args__", [])
+            # Search for List inside Union
+            for arg in args:
+                if (hasattr(arg, "__origin__") and (arg.__origin__ is list or arg.__origin__ is List)) or arg is list or arg is List:
+                    return List[str]
+            
+            if args:
+                # Pick the first non-None type for scalar types
+                for arg in args:
+                    if arg is not type(None):
+                        annotation = arg
+                        break
+
+    if annotation in (int, float, str, bool):
         return annotation
+    
+    if annotation is list or annotation is List:
+        return List[str]
+
     if default is not inspect._empty and default is not None:
-        if type(default) in (int, float, str):
+        if type(default) in (int, float, str, bool):
             return type(default)
+        if isinstance(default, list):
+            return List[str]
+            
     return str
 
 
-def _build_task_arg_parser(entry):
-    class_name = entry["class_name"]
-    display_name = entry["display_name"]
-    description = entry["description"]
-    task_class = entry["class"]
+def _register_dynamic_tasks(target_app: typer.Typer):
+    """Dynamically register discovered tasks as subcommands in the target Typer app."""
+    registry, _ = _build_task_registry()
+    
+    for class_name, entry in registry.items():
+        task_class = entry["class"]
+        description = entry["description"]
+        kebab_name = _to_kebab_case(class_name)
+        normalized_name = _normalize_task_name(class_name)
 
-    parser = argparse.ArgumentParser(
-        prog=f"ribbon run {class_name}",
-        description=(description or f"Run {display_name}."),
-    )
-
-    signature = inspect.signature(task_class.__init__)
-    params = []
-
-    for param_name, parameter in signature.parameters.items():
-        if param_name == "self":
-            continue
-        if parameter.kind in (inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD):
-            continue
-
-        params.append((param_name, parameter))
-        cli_name = param_name.replace("_", "-")
-
-        if parameter.default is inspect._empty:
-            parser.add_argument(param_name, type=_infer_arg_type(parameter))
-            continue
-
-        default = parameter.default
-
-        if isinstance(default, bool):
-            if default:
-                parser.add_argument(
-                    f"--no-{cli_name}",
-                    dest=param_name,
-                    action="store_false",
-                    default=True,
-                    help=f"Disable {param_name} (default: enabled).",
-                )
+        # Build dynamic signature from __init__
+        init_sig = inspect.signature(task_class.__init__)
+        params = []
+        
+        for name, param in init_sig.parameters.items():
+            if name == "self":
+                continue
+            
+            arg_type = _infer_arg_type(param)
+            
+            # Map Python default to Typer's Argument/Option
+            if param.default is inspect.Parameter.empty:
+                # Required argument
+                default_val = typer.Argument(..., help=f"Required argument: {name}")
             else:
-                parser.add_argument(
-                    f"--{cli_name}",
-                    dest=param_name,
-                    action="store_true",
-                    default=False,
-                    help=f"Enable {param_name} (default: disabled).",
-                )
-            continue
+                # Optional with default
+                default_val = typer.Option(param.default, help=f"Default: {param.default}")
+            
+            params.append(inspect.Parameter(
+                name=name,
+                kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,
+                default=default_val,
+                annotation=arg_type
+            ))
+            
+        # Create a wrapper function that Typer can inspect
+        def create_task_wrapper(t_class):
+            def task_wrapper(**kwargs):
+                task = t_class(**kwargs)
+                task.run()
+            return task_wrapper
 
-        if isinstance(default, list):
-            parser.add_argument(
-                f"--{cli_name}",
-                dest=param_name,
-                action="append",
-                default=None,
-                type=_infer_arg_type(parameter),
-                help=(
-                    f"Repeat to add multiple values. "
-                    f"Default: {default}"
-                ),
-            )
-            continue
+        wrapper = create_task_wrapper(task_class)
+        wrapper.__doc__ = description
+        wrapper.__signature__ = inspect.Signature(params)
 
-        parser.add_argument(
-            f"--{cli_name}",
-            dest=param_name,
-            default=default,
-            type=_infer_arg_type(parameter),
-            help=f"Default: {default}",
-        )
+        # Register the primary CamelCase command
+        target_app.command(name=class_name)(wrapper)
+        
+        # Register aliases: kebab-case and lowercase
+        aliases_to_add = set()
+        if kebab_name != class_name:
+            aliases_to_add.add(kebab_name)
+        
+        if normalized_name != class_name and normalized_name != kebab_name:
+            aliases_to_add.add(normalized_name)
 
-    return parser, params
-
-
-def _print_run_help(run_parser, registry):
-    run_parser.print_help()
-    if registry:
-        print("\nAvailable tasks:")
-        for entry in sorted(registry.values(), key=lambda item: item["display_name"].lower()):
-            display = entry["display_name"]
-            class_name = entry["class_name"]
-            desc = entry["description"] or "No description provided."
-            print(f"- {class_name}")
-            print(f"    {desc}")
+        for alias in aliases_to_add:
+            target_app.command(name=alias, hidden=True)(wrapper)
 
 
-def run_task(task_name, task_args, list_only=False, show_run_help=False):
-    '''
-    Create an instance of the CLI-specified task, and run it locally.
-    '''
-    registry, aliases = _build_task_registry()
-
-    if list_only:
+@run_app.callback(invoke_without_command=True)
+def run_callback(
+    ctx: typer.Context,
+    list_runnable: bool = typer.Option(False, "--list", help="List runnable tasks.")
+):
+    """Run a task from the active Ribbon-Tasks module."""
+    if list_runnable:
+        registry, _ = _build_task_registry()
         if not registry:
-            print("No runnable tasks discovered in the active Ribbon-Tasks version.")
+            console.print("[yellow]No runnable tasks discovered in the active Ribbon-Tasks version.[/yellow]")
             return
-        print("\nRunnable tasks:")
+        
+        table = Table(title="Runnable Tasks", box=None, show_header=False, padding=(0, 2))
+        table.add_column("Task", style="cyan")
+        table.add_column("Alias", style="dim")
         for entry in sorted(registry.values(), key=lambda item: item["display_name"].lower()):
-            print(f"- {entry['display_name']} (alias: {entry['class_name']})")
-        print("")
-        return
-
-    if show_run_help and not task_name:
-        parser = argparse.ArgumentParser(
-            prog="ribbon run",
-            description="Run a Ribbon task from the active Ribbon-Tasks module.",
-        )
-        parser.add_argument("task", nargs="?", help="Task name or alias.")
-        parser.add_argument("--list", action="store_true", help="List runnable tasks.")
-        _print_run_help(parser, registry)
-        return
-
-    if not task_name:
-        print("Error: Missing task name. Use `ribbon run --list` to see available tasks.")
-        return
-
-    normalized = _normalize_task_name(task_name)
-    class_name = aliases.get(normalized)
-    if class_name is None:
-        print(f"Error: Unknown task '{task_name}'. Use `ribbon run --list` to see available tasks.")
-        return
-
-    entry = registry[class_name]
-    parser, params = _build_task_arg_parser(entry)
-
-    if show_run_help:
-        parser.print_help()
-        return
-
-    parsed = parser.parse_args(task_args)
-
-    kwargs = {}
-    for param_name, parameter in params:
-        value = getattr(parsed, param_name)
-        if isinstance(parameter.default, list) and value is None:
-            value = copy.copy(parameter.default)
-        kwargs[param_name] = value
-
-    task_instance = entry["class"](**kwargs)
-    task_instance.run()
+            table.add_row(f"- {entry['display_name']}", f"({entry['class_name']})")
+        console.print(table)
+        raise typer.Exit()
 
 def main():
-    parser = argparse.ArgumentParser(description="Manage Ribbon task definitions.")
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
-
-    # List command
-    list_parser = subparsers.add_parser(
-        "list",
-        help="List Ribbon-Tasks versions (default) or task definitions."
-    )
-    list_parser.add_argument(
-        "target",
-        nargs="?",
-        default="versions",
-        choices=["versions", "tasks"],
-        help="What to list: versions or tasks."
-    )
-    list_parser.add_argument(
-        "--version",
-        dest="tasks_version",
-        type=str,
-        help="Ribbon-Tasks version for `list tasks` (defaults to active version)."
-    )
-    list_parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="Show task details (description, container, inputs) for `list tasks`."
-    )
-    list_parser.add_argument(
-        "--offline",
-        action="store_true",
-        help="Skip online release lookup for `list versions`."
-    )
-    list_parser.add_argument(
-        "--json",
-        dest="output_json",
-        action="store_true",
-        help="Output results as JSON."
-    )
-
-    # Use command
-    use_parser = subparsers.add_parser("use", help="Set the active task version.")
-    use_parser.add_argument("tag", type=str, help="GitHub release tag to use.")
-
-    # Info command
-    info_parser = subparsers.add_parser("info", help="Print information about the current Ribbon configuration.")
-
-    # Deserialize and run command:
-    deserialize_parser = subparsers.add_parser("deserialize_and_run", help="Deserialize and run a Ribbon task definition from a file (Used internally when queuing tasks).")
-    deserialize_parser.add_argument("file", type=str, help="Path to the file containing the task definition.")
-
-    # Run command:
-    run_parser = subparsers.add_parser(
-        "run",
-        add_help=False,
-        help="Run a task from the active Ribbon-Tasks module.",
-    )
-    run_parser.add_argument("task", nargs="?", help="Task name or alias.")
-    run_parser.add_argument("--list", action="store_true", help="List runnable tasks.")
-    run_parser.add_argument("-h", "--help", dest="run_help", action="store_true", help="Show help for `ribbon run` or a specific task.")
-
-    args, unknown = parser.parse_known_args()
-
-    if args.command != "run" and unknown:
-        parser.error(f"unrecognized arguments: {' '.join(unknown)}")
-
-    if args.command == "list":
-        target = args.target
-        # Convenience: `ribbon list --version vX.Y.Z` implies listing tasks.
-        if args.tasks_version and args.target == "versions":
-            target = "tasks"
-
-        if target == "versions":
-            list_versions(include_remote=not args.offline, output_json=args.output_json)
-        else:
-            list_task_definitions(
-                version=args.tasks_version,
-                verbose=args.verbose,
-                output_json=args.output_json,
-            )
-    elif args.command == "use":
-        use(args.tag)
-    elif args.command == "info":
-        info()
-    elif args.command == "deserialize_and_run":
-        deserialize_and_run(args.file)
-    elif args.command == "run":
-        run_task(
-            task_name=args.task,
-            task_args=unknown,
-            list_only=args.list,
-            show_run_help=getattr(args, "run_help", False),
-        )
-    else:
-        parser.print_help()
-
+    _register_dynamic_tasks(run_app)
+    app.add_typer(run_app, name="run")
+    app()
 
 if __name__ == "__main__":
     main()
