@@ -29,7 +29,7 @@ class Task:
         """
         raise NotImplementedError(f"You are attempting to run a task { self.__class__.__name__ } without defining a run method.")
     
-    def queue(self, scheduler, depends_on=[], dependency_type='afterok', n_tasks=1, time='1:00:00', mem='2G', auto_restart=True, other_resources={}, job_name=None, output_file=None, queue=None,  gpus=None, node_name=None):
+    def queue(self, scheduler, depends_on=[], dependency_type='afterok', skip_default_resources=False, n_tasks=1, time='1:00:00', mem='2G', auto_restart=True, other_resources={}, job_name=None, output_file=None, queue=None,  gpus=None, node_name=None):
         """
         Queue the LigandMPNN task using the given scheduler.
 
@@ -37,6 +37,7 @@ class Task:
             scheduler (str): The name of the scheduler to use. Options are 'SLURM' or 'SGE'.
             depends_on (list, optional): A jobID or list of jobIDs that this job depends on. (Each is an int or str). Defaults to [].
             dependency_type (str, optional): The type of dependency. Options are 'afterok', 'afternotok', 'afterany', 'after', 'singleton'. Defaults to 'afterok'.
+            skip_default_resources (bool, optional): Whether to skip the default resources. Defaults to False.
             n_tasks (int, optional): The number of tasks to run. Defaults to 1.
             time (str, optional): The time to allocate for the task. Defaults to '1:00:00'.
             mem (str, optional): The memory to allocate for the task. Defaults to '2G'.
@@ -84,14 +85,8 @@ class Task:
         # TODO: this is messy, we should clean this up later
         resources = {'time': time, 'mem': mem}
 
-        if depends_on:
-            resources['dependency'] = depends_on
-
         if gpus:
             resources['gpus'] = gpus
-
-        if job_name:
-            resources['job-name'] = job_name
 
         if auto_restart:
             resources['requeue'] = True  # Use True to indicate a flag without a value
@@ -104,6 +99,17 @@ class Task:
 
         if node_name:
             resources['node-name'] = node_name
+
+        if skip_default_resources:
+            resources = {}
+
+        if job_name:
+            resources['job-name'] = job_name
+
+        if depends_on:
+            resources['dependency'] = depends_on
+
+        
 
         # Note: We don't parse other_resouces in the same way - we just pass them through as-is,
         # assuming the user has formatted them correctly.
