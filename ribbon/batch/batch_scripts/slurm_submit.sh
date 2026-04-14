@@ -9,6 +9,9 @@ echo "Running on $(hostname)"
 echo "Starting at $(date)"
 echo "TASK_DIR: $RIBBON_TASKS_MODULE_DIR"
 
+# if $DEVICE is CPU, set NV to "". Otherwise, set NV to "--nv"
+[[ "$DEVICE" == "cpu" ]] && NV="" || NV="--nv"
+
 echo apptainer run $NV $ribbon_container ribbon deserialize_and_run $serialized_job
 apptainer run $NV $ribbon_container ribbon deserialize_and_run $serialized_job
 
